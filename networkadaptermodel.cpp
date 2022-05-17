@@ -3,6 +3,8 @@
 
 NetworkAdapterModel::NetworkAdapterModel(QObject *parent) : QAbstractListModel(parent)
 {
+    qRegisterMetaType<NetworkAdapter>();
+    qRegisterMetaType<AdapterRoles>();
 }
 
 NetworkAdapterModel::~NetworkAdapterModel() = default;
@@ -11,12 +13,11 @@ QHash<int, QByteArray> NetworkAdapterModel::roleNames() const
 {
     QHash<int, QByteArray> names = {};
     names.insert(NameRole, "name"_qba);
-    names.insert(DescriptionRole, "description"_qba);
     names.insert(HardwareAddressRole, "hardwareAddress"_qba);
     names.insert(IPv4AddressRole, "ipv4Address"_qba);
     names.insert(IPv6AddressRole, "ipv6Address"_qba);
     names.insert(NetmaskRole, "netmask"_qba);
-    names.insert(BroadcastRole, "broadcast"_qba);
+    names.insert(BroadcastAddressRole, "broadcastAddress"_qba);
     return names;
 }
 
@@ -29,7 +30,8 @@ int NetworkAdapterModel::rowCount(const QModelIndex &parent) const
 int NetworkAdapterModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return 7;
+    static const int count = roleNames().count();
+    return count;
 }
 
 QVariant NetworkAdapterModel::data(const QModelIndex &index, const int role) const
@@ -38,35 +40,35 @@ QVariant NetworkAdapterModel::data(const QModelIndex &index, const int role) con
         return {};
     }
     const int row = index.row();
-    if ((row < 0) || row >= m_adapters.count()) {
+    if ((row < 0) || (row >= m_adapters.count())) {
+        return {};
+    }
+    const int column = index.column();
+    if ((column < 0) || (column >= columnCount())) {
         return {};
     }
     const NetworkAdapter adapter = m_adapters.at(row);
     switch (role) {
     case Qt::DisplayRole: {
-        switch (index.column()) {
+        switch (column) {
         case 0:
             return adapter.Name;
         case 1:
-            return adapter.Description;
-        case 2:
             return adapter.HardwareAddress;
-        case 3:
+        case 2:
             return adapter.IPv4Address;
-        case 4:
+        case 3:
             return adapter.IPv6Address;
-        case 5:
+        case 4:
             return adapter.Netmask;
-        case 6:
-            return adapter.Broadcast;
+        case 5:
+            return adapter.BroadcastAddress;
         default:
             return {};
         }
     }
     case NameRole:
         return adapter.Name;
-    case DescriptionRole:
-        return adapter.Description;
     case HardwareAddressRole:
         return adapter.HardwareAddress;
     case IPv4AddressRole:
@@ -75,8 +77,8 @@ QVariant NetworkAdapterModel::data(const QModelIndex &index, const int role) con
         return adapter.IPv6Address;
     case NetmaskRole:
         return adapter.Netmask;
-    case BroadcastRole:
-        return adapter.Broadcast;
+    case BroadcastAddressRole:
+        return adapter.BroadcastAddress;
     default:
         return {};
     }
@@ -88,25 +90,24 @@ QVariant NetworkAdapterModel::headerData(const int section, const Qt::Orientatio
         return {};
     }
     if (orientation == Qt::Vertical) {
-        return QString::number(section);
+        return ((section < 0) ? QString{} : QString::number(section));
     }
     switch (section) {
     case 0:
         return tr("Name");
     case 1:
-        return tr("Description");
-    case 2:
         return tr("Hardware Address");
-    case 3:
+    case 2:
         return tr("IPv4 Address");
-    case 4:
+    case 3:
         return tr("IPv6 Address");
-    case 5:
+    case 4:
         return tr("Netmask");
-    case 6:
-        return tr("Broadcast");
+    case 5:
+        return tr("Broadcast Address");
+    default:
+        return {};
     }
-    return {};
 }
 
 void NetworkAdapterModel::populate()
@@ -124,23 +125,28 @@ void NetworkAdapterModel::populate()
             }
             NetworkAdapter adapter = {};
             adapter.Name = interface.humanReadableName();
-            //adapter.Description = u""_qs;
             adapter.HardwareAddress = interface.hardwareAddress();
             const QList<QNetworkAddressEntry> entries = interface.addressEntries();
             if (!entries.isEmpty()) {
                 for (auto &&entry : qAsConst(entries)) {
-                    const QHostAddress address = entry.ip();
-                    if (adapter.IPv4Address.isEmpty() && (address.protocol() == QAbstractSocket::IPv4Protocol)) {
-                        adapter.IPv4Address = address.toString();
+                    const QHostAddress ip = entry.ip();
+                    if (ip.isNull()) {
+                        continue;
                     }
-                    if (adapter.IPv6Address.isEmpty() && (address.protocol() == QAbstractSocket::IPv6Protocol)) {
-                        adapter.IPv6Address = QHostAddress(address.toIPv6Address()).toString();
+                    if (ip.isLoopback()) {
+                        continue;
+                    }
+                    if (adapter.IPv4Address.isEmpty() && (ip.protocol() == QAbstractSocket::IPv4Protocol)) {
+                        adapter.IPv4Address = ip.toString();
+                    }
+                    if (adapter.IPv6Address.isEmpty() && (ip.protocol() == QAbstractSocket::IPv6Protocol)) {
+                        adapter.IPv6Address = QHostAddress(ip.toIPv6Address()).toString();
                     }
                     if (adapter.Netmask.isEmpty() && (entry.netmask().protocol() == QAbstractSocket::IPv4Protocol)) {
                         adapter.Netmask = entry.netmask().toString();
                     }
-                    if (adapter.Broadcast.isEmpty() && (entry.broadcast().protocol() == QAbstractSocket::IPv4Protocol)) {
-                        adapter.Broadcast = entry.broadcast().toString();
+                    if (adapter.BroadcastAddress.isEmpty() && (entry.broadcast().protocol() == QAbstractSocket::IPv4Protocol)) {
+                        adapter.BroadcastAddress = entry.broadcast().toString();
                     }
                 }
             }

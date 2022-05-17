@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+#include <QtNetwork/qnetworkproxy.h>
 #include <QtGui/qguiapplication.h>
 #include <QtQml/qqmlapplicationengine.h>
 #include <QtQml/qqmlcontext.h>
@@ -40,6 +41,8 @@ int main(int argc, char *argv[])
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::Round);
 
     QGuiApplication application(argc, argv);
+
+    QNetworkProxyFactory::setUseSystemConfiguration(false);
 
     NetworkAdapterModel model;
     model.populate();

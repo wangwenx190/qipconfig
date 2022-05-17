@@ -12,12 +12,11 @@ public:
     enum AdapterRoles
     {
         NameRole = Qt::UserRole + 1,
-        DescriptionRole,
         HardwareAddressRole,
         IPv4AddressRole,
         IPv6AddressRole,
         NetmaskRole,
-        BroadcastRole
+        BroadcastAddressRole
     };
     Q_ENUM(AdapterRoles)
 

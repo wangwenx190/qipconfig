@@ -75,7 +75,7 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Network Quick)
+find_package(Qt6 REQUIRED COMPONENTS Concurrent Network Gui Quick)
 
 qt_add_executable(${PROJECT_NAME})
 
@@ -83,15 +83,19 @@ target_sources(${PROJECT_NAME} PRIVATE
     networkadapter.h
     networkadaptermodel.h networkadaptermodel.cpp
     networkinformation.h networkinformation.cpp
+    utils.h utils.cpp
+    theme.h theme.cpp
     main.cpp
 )
 
 if(WIN32)
     enable_language(RC)
-    target_sources(${PROJECT_NAME} PRIVATE app.rc app.manifest)
+    target_sources(${PROJECT_NAME} PRIVATE
+        app.rc app.manifest theme_win.cpp
+    )
 endif()
 
-set(QML_SOURCES MainWindow.qml)
+set(QML_SOURCES ClickableLabel.qml MainWindow.qml)
 
 qt_add_qml_module(${PROJECT_NAME}
     URI ${PROJECT_NAME}
@@ -124,12 +128,15 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Network Qt::Quick)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    Qt::Concurrent Qt::Network Qt::GuiPrivate Qt::Quick
+)
 
 if(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE
         /utf-8 /W4 /WX
     )
+    target_link_libraries(${PROJECT_NAME} PRIVATE dwmapi)
 else()
     target_compile_options(${PROJECT_NAME} PRIVATE
         -Wall -Wextra -Werror

@@ -29,107 +29,221 @@ import QIPConfig
 
 Window {
     id: window
-    width: 640
-    height: 480
+    width: 1000
+    height: 700
     visible: true
+    //color: Qt.color("transparent")
     title: Application.displayName
+
+    Rectangle {
+        id: hostInfoPanel
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
+        height: 80
+        color: Qt.color("transparent")
+
+        RowLayout {
+            anchors {
+                top: parent.top
+                left: parent.left
+            }
+            //width: 500
+            spacing: 5
+
+            Rectangle {
+                width: 5
+                height: parent.height
+                color: Qt.color("darkGray")
+            }
+
+            ColumnLayout {
+                Label {
+                    font.pointSize: 12
+                    color: Theme.labelColor
+                    text: qsTr("Internet Address")
+                }
+
+                ClickableLabel {
+                    Layout.fillWidth: true
+                    font.pointSize: 16
+                    color: Theme.labelColor
+                    text: NetworkInformation.internetIPv4Address
+                }
+            }
+
+            Rectangle {
+                width: 5
+                height: parent.height
+                color: Qt.color("darkGray")
+            }
+
+            ColumnLayout {
+                Label {
+                    font.pointSize: 12
+                    color: Theme.labelColor
+                    text: qsTr("Local Address")
+                }
+
+                ClickableLabel {
+                    Layout.fillWidth: true
+                    font.pointSize: 16
+                    color: Theme.labelColor
+                    text: NetworkInformation.localIPv4Address
+                }
+            }
+        }
+    }
 
     GridView {
         id: grid
-        anchors.fill: parent
+        anchors {
+            top: hostInfoPanel.bottom
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+        }
         clip: true
-        cellWidth: 400
-        cellHeight: 300
+        cellWidth: 500
+        cellHeight: 380
         model: networkAdapterModel
         delegate: Rectangle {
             required property string name
-            required property string description
             required property string hardwareAddress
             required property string ipv4Address
             required property string ipv6Address
             required property string netmask
-            required property string broadcast
+            required property string broadcastAddress
 
             id: delegate
             width: grid.cellWidth
             height: grid.cellHeight
-            color: Qt.color("gray")
+            color: Qt.color("transparent")
 
-            ColumnLayout {
-                anchors.fill: parent
-                anchors.margins: 10
-                spacing: 0
+            Rectangle {
+                anchors {
+                    fill: parent
+                    margins: 10
+                }
+                color: Qt.rgba(0, 0, 0, 0.5)
 
-                Rectangle {
-                    Layout.fillWidth: true
-                    color: Qt.color("blue")
-                    height: 20
+                ColumnLayout {
+                    anchors.fill: parent
+                    spacing: 5
+
+                    Rectangle {
+                        Layout.fillWidth: true
+                        color: Theme.accentColor
+                        height: 35
+
+                        Label {
+                            anchors {
+                                fill: parent
+                                leftMargin: 10
+                            }
+                            font.pointSize: Theme.titleFontSize
+                            color: Theme.labelColor
+                            text: delegate.name
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                    }
 
                     Label {
-                        anchors.fill: parent
-                        color: Qt.color("white")
-                        text: delegate.name
+                        Layout.leftMargin: 10
+                        color: Theme.labelColor
+                        font {
+                            bold: true
+                            pointSize: Theme.titleFontSize
+                        }
+                        text: qsTr("Hardware Address")
                     }
-                }
 
-                Label {
-                    color: Qt.color("white")
-                    font.bold: true
-                    text: qsTr("Hardware Address")
-                }
+                    ClickableLabel {
+                        Layout.fillWidth: true
+                        Layout.leftMargin: 10
+                        font.pointSize: Theme.contentFontSize
+                        color: Theme.labelColor
+                        text: delegate.hardwareAddress
+                    }
 
-                Label {
-                    Layout.fillWidth: true
-                    color: Qt.color("white")
-                    text: delegate.hardwareAddress
-                }
+                    Label {
+                        Layout.leftMargin: 10
+                        color: Theme.labelColor
+                        font {
+                            bold: true
+                            pointSize: Theme.titleFontSize
+                        }
+                        text: qsTr("IPv4 Address")
+                    }
 
-                Label {
-                    color: Qt.color("white")
-                    font.bold: true
-                    text: qsTr("IPv4 Address")
-                }
+                    ClickableLabel {
+                        Layout.fillWidth: true
+                        Layout.leftMargin: 10
+                        font.pointSize: Theme.contentFontSize
+                        color: Theme.labelColor
+                        text: delegate.ipv4Address
+                    }
 
-                Label {
-                    Layout.fillWidth: true
-                    color: Qt.color("white")
-                    text: delegate.ipv4Address
-                }
+                    Label {
+                        Layout.leftMargin: 10
+                        color: Theme.labelColor
+                        font {
+                            bold: true
+                            pointSize: Theme.titleFontSize
+                        }
+                        text: qsTr("IPv6 Address")
+                    }
 
-                Label {
-                    color: Qt.color("white")
-                    font.bold: true
-                    text: qsTr("IPv6 Address")
-                }
+                    ClickableLabel {
+                        Layout.fillWidth: true
+                        Layout.leftMargin: 10
+                        font.pointSize: Theme.contentFontSize
+                        color: Theme.labelColor
+                        text: delegate.ipv6Address
+                    }
 
-                Label {
-                    Layout.fillWidth: true
-                    color: Qt.color("white")
-                    text: delegate.ipv6Address
-                }
+                    Label {
+                        Layout.leftMargin: 10
+                        color: Theme.labelColor
+                        font {
+                            bold: true
+                            pointSize: Theme.titleFontSize
+                        }
+                        text: qsTr("Netmask")
+                    }
 
-                Label {
-                    color: Qt.color("white")
-                    font.bold: true
-                    text: qsTr("Netmask")
-                }
+                    ClickableLabel {
+                        Layout.fillWidth: true
+                        Layout.leftMargin: 10
+                        font.pointSize: Theme.contentFontSize
+                        color: Theme.labelColor
+                        text: delegate.netmask
+                    }
 
-                Label {
-                    Layout.fillWidth: true
-                    color: Qt.color("white")
-                    text: delegate.netmask
-                }
+                    Label {
+                        Layout.leftMargin: 10
+                        color: Theme.labelColor
+                        font {
+                            bold: true
+                            pointSize: Theme.titleFontSize
+                        }
+                        text: qsTr("Broadcast Address")
+                    }
 
-                Label {
-                    color: Qt.color("white")
-                    font.bold: true
-                    text: qsTr("Broadcast Address")
-                }
+                    ClickableLabel {
+                        Layout.fillWidth: true
+                        Layout.leftMargin: 10
+                        font.pointSize: Theme.contentFontSize
+                        color: Theme.labelColor
+                        text: delegate.broadcastAddress
+                    }
 
-                Label {
-                    Layout.fillWidth: true
-                    color: Qt.color("white")
-                    text: delegate.broadcast
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                    }
                 }
             }
         }
