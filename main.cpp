@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
 
     NetworkAdapterModel model;
     model.populate();
+
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty(u"networkAdapterModel"_qs, &model);
 
@@ -55,17 +56,16 @@ int main(int argc, char *argv[])
         &engine,
         &QQmlApplicationEngine::objectCreated,
         &application,
-        [&mainUrl, &connection](QObject *obj, const QUrl &objUrl) {
-            if (objUrl != mainUrl) {
+        [&mainUrl, &connection](QObject *object, const QUrl &objectUrl) {
+            if (objectUrl != mainUrl) {
                 return;
             }
-            if (obj) {
+            if (object) {
                 QObject::disconnect(connection);
             } else {
                 QCoreApplication::exit(-1);
             }
-        },
-        Qt::QueuedConnection);
+        }, Qt::QueuedConnection);
 
     engine.load(mainUrl);
 

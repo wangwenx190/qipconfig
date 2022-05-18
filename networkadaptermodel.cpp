@@ -11,13 +11,14 @@ NetworkAdapterModel::~NetworkAdapterModel() = default;
 
 QHash<int, QByteArray> NetworkAdapterModel::roleNames() const
 {
-    QHash<int, QByteArray> names = {};
-    names.insert(NameRole, "name"_qba);
-    names.insert(HardwareAddressRole, "hardwareAddress"_qba);
-    names.insert(IPv4AddressRole, "ipv4Address"_qba);
-    names.insert(IPv6AddressRole, "ipv6Address"_qba);
-    names.insert(NetmaskRole, "netmask"_qba);
-    names.insert(BroadcastAddressRole, "broadcastAddress"_qba);
+    static const QHash<int, QByteArray> names = {
+        { NameRole, "name"_qba },
+        { HardwareAddressRole, "hardwareAddress"_qba },
+        { IPv4AddressRole, "ipv4Address"_qba },
+        { IPv6AddressRole, "ipv6Address"_qba },
+        { NetmaskRole, "netmask"_qba },
+        { BroadcastAddressRole, "broadcastAddress"_qba }
+    };
     return names;
 }
 

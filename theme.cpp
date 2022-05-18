@@ -4,15 +4,15 @@
 
 Theme::Theme(QObject *parent) : QObject(parent)
 {
-    qRegisterMetaType<Type>();
+    qRegisterMetaType<ThemeType>();
     refresh();
 }
 
 Theme::~Theme() = default;
 
-Theme::Type Theme::theme() const
+Theme::ThemeType Theme::theme() const
 {
-    return (m_dark ? Type::Dark : Type::Light);
+    return (m_dark ? ThemeType::Dark : ThemeType::Light);
 }
 
 QColor Theme::labelColor() const

@@ -4,15 +4,79 @@
 #include <QtNetwork/qnetworkaccessmanager.h>
 #include <QtNetwork/qnetworkrequest.h>
 #include <QtNetwork/qnetworkreply.h>
+#include <QtNetwork/qnetworkinformation.h>
 
 NetworkInformation::NetworkInformation(QObject *parent) : QObject(parent)
 {
-    qRegisterMetaType<Type>();
+    qRegisterMetaType<AddressType>();
+    qRegisterMetaType<NetworkStatus>();
+    qRegisterMetaType<TransportMedium>();
+    if (QNetworkInformation::loadDefaultBackend()) {
+        if (const QNetworkInformation * const ni = QNetworkInformation::instance()) {
+            connect(ni, &QNetworkInformation::reachabilityChanged, this, [this](QNetworkInformation::Reachability){ Q_EMIT networkStatusChanged(); });
+            connect(ni, &QNetworkInformation::transportMediumChanged, this, [this](QNetworkInformation::TransportMedium){ Q_EMIT transportMediumChanged(); });
+            connect(ni, &QNetworkInformation::isBehindCaptivePortalChanged, this, [this](bool){ Q_EMIT behindCaptivePortalChanged(); });
+            connect(ni, &QNetworkInformation::isMeteredChanged, this, [this](bool){ Q_EMIT meteredChanged(); });
+        } else {
+            qWarning() << "The QNetworkInformation instance is null.";
+        }
+    } else {
+        qWarning() << "Failed to load the default QNetworkInformation backend.";
+    }
 }
 
 NetworkInformation::~NetworkInformation() = default;
 
-QString NetworkInformation::getLocalIPAddress(const Type type) const
+NetworkInformation::NetworkStatus NetworkInformation::networkStatus() const
+{
+    if (const QNetworkInformation * const ni = QNetworkInformation::instance()) {
+        const QNetworkInformation::Reachability reachability = ni->reachability();
+        if (reachability == QNetworkInformation::Reachability::Online) {
+            return NetworkStatus::Online;
+        }
+        if (reachability != QNetworkInformation::Reachability::Unknown) {
+            return NetworkStatus::Offline;
+        }
+    }
+    return NetworkStatus::Unknown;
+}
+
+NetworkInformation::TransportMedium NetworkInformation::transportMedium() const
+{
+    if (const QNetworkInformation * const ni = QNetworkInformation::instance()) {
+        switch (ni->transportMedium()) {
+        case QNetworkInformation::TransportMedium::Ethernet:
+            return TransportMedium::Ethernet;
+        case QNetworkInformation::TransportMedium::Cellular:
+            return TransportMedium::Cellular;
+        case QNetworkInformation::TransportMedium::WiFi:
+            return TransportMedium::WiFi;
+        case QNetworkInformation::TransportMedium::Bluetooth:
+            return TransportMedium::Bluetooth;
+        default:
+            break;
+        }
+    }
+    return TransportMedium::Unknown;
+}
+
+bool NetworkInformation::isBehindCaptivePortal() const
+{
+    if (const QNetworkInformation * const ni = QNetworkInformation::instance()) {
+        return ni->isBehindCaptivePortal();
+    }
+    return false;
+}
+
+bool NetworkInformation::isMetered() const
+{
+    if (const QNetworkInformation * const ni = QNetworkInformation::instance()) {
+        return ni->isMetered();
+    }
+    return false;
+}
+
+QString NetworkInformation::getLocalIPAddress(const AddressType type) const
 {
     const QHostInfo info = QHostInfo::fromName(QHostInfo::localHostName());
     if (info.error() != QHostInfo::NoError) {
@@ -28,10 +92,10 @@ QString NetworkInformation::getLocalIPAddress(const Type type) const
             if (address.isLoopback()) {
                 continue;
             }
-            if ((type == Type::IPv4) && (address.protocol() == QAbstractSocket::IPv4Protocol)) {
+            if ((type == AddressType::IPv4) && (address.protocol() == QAbstractSocket::IPv4Protocol)) {
                 return address.toString();
             }
-            if ((type == Type::IPv6) && (address.protocol() == QAbstractSocket::IPv6Protocol)) {
+            if ((type == AddressType::IPv6) && (address.protocol() == QAbstractSocket::IPv6Protocol)) {
                 return QHostAddress(address.toIPv6Address()).toString();
             }
         }
@@ -39,7 +103,7 @@ QString NetworkInformation::getLocalIPAddress(const Type type) const
     return {};
 }
 
-QString NetworkInformation::getInternetIPAddress(const Type type) const
+QString NetworkInformation::getInternetIPAddress(const AddressType type) const
 {
 #if 0
     Q_UNUSED(type);
@@ -55,24 +119,4 @@ QString NetworkInformation::getInternetIPAddress(const Type type) const
     Q_UNUSED(type);
     return {};
 #endif
-}
-
-QString NetworkInformation::localIPv4Address() const
-{
-    return getLocalIPAddress(Type::IPv4);
-}
-
-QString NetworkInformation::localIPv6Address() const
-{
-    return getLocalIPAddress(Type::IPv6);
-}
-
-QString NetworkInformation::internetIPv4Address() const
-{
-    return getInternetIPAddress(Type::IPv4);
-}
-
-QString NetworkInformation::internetIPv6Address() const
-{
-    return getInternetIPAddress(Type::IPv6);
 }

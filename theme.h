@@ -11,20 +11,20 @@ class Theme : public QObject
     QML_SINGLETON
     Q_DISABLE_COPY_MOVE(Theme)
 
-    Q_PROPERTY(Type theme READ theme NOTIFY themeChanged FINAL)
+    Q_PROPERTY(ThemeType theme READ theme NOTIFY themeChanged FINAL)
     Q_PROPERTY(QColor accentColor READ accentColor NOTIFY themeChanged FINAL)
     Q_PROPERTY(QColor labelColor READ labelColor NOTIFY themeChanged FINAL)
     Q_PROPERTY(qreal titleFontSize READ titleFontSize CONSTANT FINAL)
     Q_PROPERTY(qreal contentFontSize READ contentFontSize CONSTANT FINAL)
 
 public:
-    enum class Type { Light, Dark };
-    Q_ENUM(Type)
+    enum class ThemeType { Light, Dark };
+    Q_ENUM(ThemeType)
 
     explicit Theme(QObject *parent = nullptr);
     ~Theme() override;
 
-    [[nodiscard]] Type theme() const;
+    [[nodiscard]] ThemeType theme() const;
     [[nodiscard]] QColor accentColor() const;
     [[nodiscard]] QColor labelColor() const;
     [[nodiscard]] qreal titleFontSize() const;

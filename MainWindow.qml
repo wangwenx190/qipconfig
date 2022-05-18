@@ -30,7 +30,7 @@ import QIPConfig
 Window {
     id: window
     width: 1000
-    height: 700
+    height: 800
     visible: true
     //color: Qt.color("transparent")
     title: Application.displayName
@@ -48,14 +48,14 @@ Window {
         RowLayout {
             anchors {
                 top: parent.top
+                bottom: parent.bottom
                 left: parent.left
             }
-            //width: 500
             spacing: 5
 
             Rectangle {
+                Layout.fillHeight: true
                 width: 5
-                height: parent.height
                 color: Qt.color("darkGray")
             }
 
@@ -70,13 +70,13 @@ Window {
                     Layout.fillWidth: true
                     font.pointSize: 16
                     color: Theme.labelColor
-                    text: NetworkInformation.internetIPv4Address
+                    text: NetworkInformation.getInternetIPAddress(NetworkInformation.IPv4)
                 }
             }
 
             Rectangle {
+                Layout.fillHeight: true
                 width: 5
-                height: parent.height
                 color: Qt.color("darkGray")
             }
 
@@ -91,17 +91,17 @@ Window {
                     Layout.fillWidth: true
                     font.pointSize: 16
                     color: Theme.labelColor
-                    text: NetworkInformation.localIPv4Address
+                    text: NetworkInformation.getLocalIPAddress(NetworkInformation.IPv4)
                 }
             }
         }
     }
 
     GridView {
-        id: grid
+        id: networkAdapterGrid
         anchors {
             top: hostInfoPanel.bottom
-            bottom: parent.bottom
+            bottom: networkIndicatorPanel.top
             left: parent.left
             right: parent.right
         }
@@ -118,8 +118,8 @@ Window {
             required property string broadcastAddress
 
             id: delegate
-            width: grid.cellWidth
-            height: grid.cellHeight
+            width: networkAdapterGrid.cellWidth
+            height: networkAdapterGrid.cellHeight
             color: Qt.color("transparent")
 
             Rectangle {
@@ -143,7 +143,10 @@ Window {
                                 fill: parent
                                 leftMargin: 10
                             }
-                            font.pointSize: Theme.titleFontSize
+                            font {
+                                bold: true
+                                pointSize: Theme.titleFontSize
+                            }
                             color: Theme.labelColor
                             text: delegate.name
                             verticalAlignment: Text.AlignVCenter
@@ -244,6 +247,131 @@ Window {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                     }
+                }
+            }
+        }
+    }
+
+    Rectangle {
+        id: networkIndicatorPanel
+        anchors {
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+        }
+        height: 80
+
+        RowLayout {
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                left: parent.left
+            }
+            spacing: 5
+
+            Rectangle {
+                Layout.fillHeight: true
+                width: 5
+                color: Qt.color("darkGray")
+            }
+
+            ColumnLayout {
+                Label {
+                    font.pointSize: 12
+                    color: Theme.labelColor
+                    text: qsTr("Network Status")
+                }
+
+                Label {
+                    Layout.fillWidth: true
+                    font.pointSize: 16
+                    color: Theme.labelColor
+                    text: {
+                        switch (NetworkInformation.networkStatus) {
+                        case NetworkInformation.Unknown:
+                            return qsTr("UNKNOWN");
+                        case NetworkInformation.Online:
+                            return qsTr("ONLINE");
+                        case NetworkInformation.Offline:
+                            return qsTr("OFFLINE");
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                Layout.fillHeight: true
+                width: 5
+                color: Qt.color("darkGray")
+            }
+
+            ColumnLayout {
+                Label {
+                    font.pointSize: 12
+                    color: Theme.labelColor
+                    text: qsTr("Transport Medium")
+                }
+
+                Label {
+                    Layout.fillWidth: true
+                    font.pointSize: 16
+                    color: Theme.labelColor
+                    text: {
+                        switch (NetworkInformation.transportMedium) {
+                        case NetworkInformation.Unknown:
+                            return qsTr("UNKNOWN");
+                        case NetworkInformation.Ethernet:
+                            return qsTr("ETHERNET");
+                        case NetworkInformation.Cellular:
+                            return qsTr("CELLULAR");
+                        case NetworkInformation.WiFi:
+                            return qsTr("WIFI");
+                        case NetworkInformation.Bluetooth:
+                            return qsTr("BLUETOOTH");
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                Layout.fillHeight: true
+                width: 5
+                color: Qt.color("darkGray")
+            }
+
+            ColumnLayout {
+                Label {
+                    font.pointSize: 12
+                    color: Theme.labelColor
+                    text: qsTr("Behind Captive Portal")
+                }
+
+                Label {
+                    Layout.fillWidth: true
+                    font.pointSize: 16
+                    color: Theme.labelColor
+                    text: NetworkInformation.behindCaptivePortal ? qsTr("YES") : qsTr("NO")
+                }
+            }
+
+            Rectangle {
+                Layout.fillHeight: true
+                width: 5
+                color: Qt.color("darkGray")
+            }
+
+            ColumnLayout {
+                Label {
+                    font.pointSize: 12
+                    color: Theme.labelColor
+                    text: qsTr("Metered")
+                }
+
+                Label {
+                    Layout.fillWidth: true
+                    font.pointSize: 16
+                    color: Theme.labelColor
+                    text: NetworkInformation.metered ? qsTr("YES") : qsTr("NO")
                 }
             }
         }

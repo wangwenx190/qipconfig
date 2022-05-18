@@ -10,24 +10,36 @@ class NetworkInformation : public QObject
     QML_SINGLETON
     Q_DISABLE_COPY_MOVE(NetworkInformation)
 
-    Q_PROPERTY(QString localIPv4Address READ localIPv4Address CONSTANT FINAL)
-    Q_PROPERTY(QString localIPv6Address READ localIPv6Address CONSTANT FINAL)
-    Q_PROPERTY(QString internetIPv4Address READ internetIPv4Address CONSTANT FINAL)
-    Q_PROPERTY(QString internetIPv6Address READ internetIPv6Address CONSTANT FINAL)
+    Q_PROPERTY(NetworkStatus networkStatus READ networkStatus NOTIFY networkStatusChanged FINAL)
+    Q_PROPERTY(TransportMedium transportMedium READ transportMedium NOTIFY transportMediumChanged FINAL)
+    Q_PROPERTY(bool behindCaptivePortal READ isBehindCaptivePortal NOTIFY behindCaptivePortalChanged FINAL)
+    Q_PROPERTY(bool metered READ isMetered NOTIFY meteredChanged FINAL)
 
 public:
-    enum class Type { IPv4, IPv6 };
-    Q_ENUM(Type)
+    enum class AddressType { IPv4, IPv6 };
+    Q_ENUM(AddressType)
+
+    enum class NetworkStatus { Unknown, Online, Offline };
+    Q_ENUM(NetworkStatus)
+
+    enum class TransportMedium { Unknown, Ethernet, Cellular, WiFi, Bluetooth };
+    Q_ENUM(TransportMedium)
 
     explicit NetworkInformation(QObject *parent = nullptr);
     ~NetworkInformation() override;
 
-    [[nodiscard]] Q_INVOKABLE QString getLocalIPAddress(const Type type) const;
-    [[nodiscard]] Q_INVOKABLE QString getInternetIPAddress(const Type type) const;
+    [[nodiscard]] NetworkStatus networkStatus() const;
+    [[nodiscard]] TransportMedium transportMedium() const;
+    [[nodiscard]] bool isBehindCaptivePortal() const;
+    [[nodiscard]] bool isMetered() const;
 
-    [[nodiscard]] QString localIPv4Address() const;
-    [[nodiscard]] QString localIPv6Address() const;
-    [[nodiscard]] QString internetIPv4Address() const;
-    [[nodiscard]] QString internetIPv6Address() const;
+    [[nodiscard]] Q_INVOKABLE QString getLocalIPAddress(const AddressType type) const;
+    [[nodiscard]] Q_INVOKABLE QString getInternetIPAddress(const AddressType type) const;
+
+Q_SIGNALS:
+    void networkStatusChanged();
+    void transportMediumChanged();
+    void behindCaptivePortalChanged();
+    void meteredChanged();
 };
 

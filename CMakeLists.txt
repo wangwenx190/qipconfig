@@ -75,7 +75,7 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Concurrent Network Gui Quick)
+find_package(Qt6 REQUIRED COMPONENTS Core Concurrent Network Gui Quick)
 
 qt_add_executable(${PROJECT_NAME})
 
@@ -129,14 +129,14 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    Qt::Concurrent Qt::Network Qt::GuiPrivate Qt::Quick
+    Qt::CorePrivate Qt::Concurrent Qt::Network
+    Qt::GuiPrivate Qt::Quick
 )
 
 if(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE
         /utf-8 /W4 /WX
     )
-    target_link_libraries(${PROJECT_NAME} PRIVATE dwmapi)
 else()
     target_compile_options(${PROJECT_NAME} PRIVATE
         -Wall -Wextra -Werror
