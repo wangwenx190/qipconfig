@@ -85,6 +85,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     networkinformation.h networkinformation.cpp
     utils.h utils.cpp
     theme.h theme.cpp
+    themenotifier.h themenotifier.cpp
     main.cpp
 )
 

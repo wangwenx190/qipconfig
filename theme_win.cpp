@@ -1,5 +1,7 @@
 #include "theme.h"
+#include "themenotifier.h"
 #include <QtCore/qdebug.h>
+#include <QtCore/qcoreapplication.h>
 #include <QtCore/qabstractnativeeventfilter.h>
 #include <QtCore/private/qsystemlibrary_p.h>
 #include <QtCore/qt_windows.h>
@@ -25,10 +27,22 @@ public:
         if ((msg->message == WM_SETTINGCHANGE) && (msg->lParam != 0) &&
                (std::wcscmp(reinterpret_cast<LPCWSTR>(msg->lParam), L"ImmersiveColorSet") == 0)) {
             qDebug() << "Detected system theme change event.";
+            Q_EMIT ThemeNotifier::instance()->themeChanged();
         }
         return false;
     }
 };
+
+Q_GLOBAL_STATIC(QScopedPointer<ThemeWin32EventFilter>, themeWin32EventFilter)
+
+void setupWin32EventFilter()
+{
+    if (!themeWin32EventFilter()->isNull()) {
+        return;
+    }
+    themeWin32EventFilter()->reset(new ThemeWin32EventFilter);
+    qApp->installNativeEventFilter(themeWin32EventFilter()->get());
+}
 
 QColor Theme::accentColor() const
 {

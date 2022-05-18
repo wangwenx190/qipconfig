@@ -30,8 +30,11 @@ public:
     [[nodiscard]] qreal titleFontSize() const;
     [[nodiscard]] qreal contentFontSize() const;
 
-private:
+public Q_SLOTS:
     void refresh();
+
+protected:
+    [[nodiscard]] bool eventFilter(QObject *object, QEvent *event) override;
 
 Q_SIGNALS:
     void themeChanged();
