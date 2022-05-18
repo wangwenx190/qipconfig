@@ -1,0 +1,8 @@
+[submodule "3rdparty/framelesshelper"]
+	path = 3rdparty/framelesshelper
+	url = https://github.com/wangwenx190/framelesshelper.git
+	branch = main
+[submodule "3rdparty/qtacrylicmaterial"]
+	path = 3rdparty/qtacrylicmaterial
+	url = https://github.com/wangwenx190/qtacrylicmaterial.git
+	branch = main
