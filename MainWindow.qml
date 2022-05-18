@@ -250,6 +250,7 @@ Window {
                 }
             }
         }
+        Component.onCompleted: networkAdapterModel.populate()
     }
 
     Rectangle {

@@ -18,7 +18,7 @@ class Theme : public QObject
     Q_PROPERTY(qreal contentFontSize READ contentFontSize CONSTANT FINAL)
 
 public:
-    enum class ThemeType { Light, Dark };
+    enum class ThemeType { Light, Dark, Default = Dark };
     Q_ENUM(ThemeType)
 
     explicit Theme(QObject *parent = nullptr);
