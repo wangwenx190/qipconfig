@@ -30,8 +30,12 @@
 #include <QtQml/qqmlcontext.h>
 #include <QtQuick/qsgrendererinterface.h>
 #include <QtQuick/qquickwindow.h>
+#include <framelessquickmodule.h>
+#include <qtacrylicmaterialplugin.h>
 #include "themehelper.h"
 #include "networkadaptermodel.h"
+
+FRAMELESSHELPER_USE_NAMESPACE
 
 [[nodiscard]] static inline bool isInsensitiveEqual(const QString &lhs, const QString &rhs)
 {
@@ -96,6 +100,8 @@
 
 int main(int argc, char *argv[])
 {
+    FramelessHelper::Core::initialize();
+
     QCoreApplication::setApplicationName(u"QIPConfig"_qs);
     QGuiApplication::setApplicationDisplayName(u"QIPConfig"_qs);
     QCoreApplication::setApplicationVersion(u"1.0.0.0"_qs);
@@ -146,6 +152,10 @@ int main(int argc, char *argv[])
     NetworkAdapterModel model;
 
     QQmlApplicationEngine engine;
+
+    FramelessHelper::Quick::registerTypes(&engine);
+    QtAcrylicMaterial::registerTypes(&engine);
+
     engine.rootContext()->setContextProperty(u"networkAdapterModel"_qs, &model);
 
     const QUrl mainUrl(u"qrc:///QIPConfig/MainWindow.qml"_qs);

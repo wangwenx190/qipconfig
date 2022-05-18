@@ -25,20 +25,54 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import org.wangwenx190.FramelessHelper
+import org.wangwenx190.QtAcrylicMaterial
 import QIPConfig
 
-Window {
+FramelessWindow {
     id: window
     width: 1000
     height: 800
-    visible: true
-    //color: Qt.color("transparent")
+    visible: false
+    color: Qt.color("transparent")
     title: Application.displayName
+
+    FramelessHelper.onReady: {
+        FramelessHelper.titleBarItem = titleBar;
+        FramelessHelper.setSystemButton(titleBar.minimizeButton, FramelessHelperConstants.Minimize);
+        FramelessHelper.setSystemButton(titleBar.maximizeButton, FramelessHelperConstants.Maximize);
+        FramelessHelper.setSystemButton(titleBar.closeButton, FramelessHelperConstants.Close);
+        FramelessHelper.moveWindowToDesktopCenter();
+        window.visible = true;
+    }
+
+    DesktopWallpaper {
+        id: wallpaper
+        anchors {
+            top: titleBar.top
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+        }
+        visible: false
+    }
+
+    AcrylicMaterial {
+        id: acrylic
+        anchors {
+            top: titleBar.top
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+        }
+        source: wallpaper
+        theme: AcrylicMaterial.System
+    }
 
     Rectangle {
         id: hostInfoPanel
         anchors {
-            top: parent.top
+            top: titleBar.bottom
             left: parent.left
             right: parent.right
         }
@@ -261,6 +295,7 @@ Window {
             right: parent.right
         }
         height: 80
+        color: Qt.color("transparent")
 
         RowLayout {
             anchors {
@@ -376,5 +411,17 @@ Window {
                 }
             }
         }
+    }
+
+    StandardTitleBar {
+        id: titleBar
+        anchors {
+            top: window.topBorderBottom
+            left: parent.left
+            right: parent.right
+        }
+        titleLabel.visible: false
+        useAlternativeBackground: true
+        color: Qt.color("transparent")
     }
 }

@@ -26,8 +26,8 @@ cmake_minimum_required(VERSION 3.23)
 
 project(QIPConfig
     VERSION 1.0.0.0
-    DESCRIPTION "IPConfig tool based on Qt Quick."
-    HOMEPAGE_URL "https://github.com/wangwenx190/framelesshelper/"
+    DESCRIPTION "A convenient tool to show your network configuration."
+    HOMEPAGE_URL "https://github.com/wangwenx190/qipconfig/"
     LANGUAGES CXX
 )
 
@@ -75,7 +75,16 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Concurrent Network Gui Quick)
+set(FRAMELESSHELPER_BUILD_STATIC ON)
+set(FRAMELESSHELPER_BUILD_WIDGETS OFF)
+set(FRAMELESSHELPER_BUILD_EXAMPLES OFF)
+
+set(QTACRYLICMATERIAL_BUILD_DEMO OFF)
+set(QTACRYLICMATERIAL_BUILD_STATIC ON)
+
+find_package(Qt6 REQUIRED COMPONENTS
+    Core Concurrent Network Gui ShaderTools Quick
+)
 
 qt_add_executable(${PROJECT_NAME})
 
@@ -102,8 +111,10 @@ qt_add_qml_module(${PROJECT_NAME}
     URI ${PROJECT_NAME}
     VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     IMPORTS QtQuick
-    #DEPENDENCIES org.wangwenx190.QtAcrylicMaterial
-    #IMPORT_PATH ${import_dir_path}
+    DEPENDENCIES
+        org.wangwenx190.FramelessHelper
+        org.wangwenx190.QtAcrylicMaterial
+    #IMPORT_PATH ${PROJECT_BINARY_DIR}/imports
     QML_FILES ${QML_SOURCES}
 )
 
@@ -132,6 +143,8 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt::CorePrivate Qt::Concurrent Qt::Network
     Qt::GuiPrivate Qt::Quick
+    FramelessHelperCore FramelessHelperQuick
+    QtAcrylicMaterial
 )
 
 if(MSVC)
@@ -143,3 +156,5 @@ else()
         -Wall -Wextra -Werror
     )
 endif()
+
+add_subdirectory(3rdparty)

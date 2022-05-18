@@ -27,7 +27,7 @@
 IDI_ICON1 ICON "app.ico"
 
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION     1,0,0,0
+FILEVERSION     0,0,0,0
 PRODUCTVERSION  1,0,0,0
 FILEFLAGSMASK   0x3fL
 #ifdef _DEBUG
@@ -44,8 +44,8 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "CompanyName",      "wangwenx190"
-            VALUE "FileDescription",  "QIPConfig"
-            VALUE "FileVersion",      "1.0.0.0"
+            VALUE "FileDescription",  "A convenient tool to show your network configuration."
+            VALUE "FileVersion",      "0.0.0.0"
             VALUE "LegalCopyright",   "MIT License"
             VALUE "ProductName",      "QIPConfig"
             VALUE "ProductVersion",   "1.0.0.0"
