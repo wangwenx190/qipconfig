@@ -30,17 +30,39 @@ Label {
     id: label
 
     MouseArea {
+        property bool alternative: false
+        readonly property real fontSizeDiff: 2
+
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
-        onEntered: label.font.bold = true
-        onExited: label.font.bold = false
-        onClicked: Utils.copyToClipboard(label.text)
+        onEntered: {
+            if (label.font.bold) {
+                mouseArea.alternative = true;
+                label.font.pointSize += mouseArea.fontSizeDiff;
+            } else {
+                label.font.bold = true;
+            }
+        }
+        onExited: {
+            if (mouseArea.alternative) {
+                mouseArea.alternative = false;
+                label.font.pointSize -= mouseArea.fontSizeDiff;
+            } else {
+                label.font.bold = false;
+            }
+            toolTip.text = qsTr("Click to copy it's text to the clipboard.");
+        }
+        onClicked: {
+            Utils.copyToClipboard(label.text);
+            toolTip.text = qsTr("\"%1\" has been copied to the clipboard!").arg(label.text);
+        }
     }
 
     ToolTip {
+        id: toolTip
         delay: 0
-        text: qsTr("Click to copy to clipboard.")
+        text: qsTr("Click to copy it's text to the clipboard.")
         visible: mouseArea.containsMouse
     }
 }

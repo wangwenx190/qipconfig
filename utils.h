@@ -1,7 +1,12 @@
 #pragma once
 
 #include <QtCore/qobject.h>
+#include <QtGui/qwindow.h>
 #include <QtQml/qqmlregistration.h>
+
+QT_BEGIN_NAMESPACE
+class QSettings;
+QT_END_NAMESPACE
 
 class Utils : public QObject
 {
@@ -14,6 +19,12 @@ public:
     explicit Utils(QObject *parent = nullptr);
     ~Utils() override;
 
-    Q_INVOKABLE void copyToClipboard(const QString &text);
+public Q_SLOTS:
+    void copyToClipboard(const QString &text);
+    void saveGeometry(QWindow *window);
+    [[nodiscard]] bool restoreGeometry(QWindow *window);
+
+private:
+    QScopedPointer<QSettings> m_settings;
 };
 

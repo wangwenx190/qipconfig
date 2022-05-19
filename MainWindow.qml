@@ -31,25 +31,28 @@ import QIPConfig
 
 FramelessWindow {
     id: window
-    width: 1000
-    height: 800
+    width: Theme.windowSize.width
+    height: Theme.windowSize.height
     visible: false
-    color: Qt.color("transparent")
+    color: Theme.windowColor
     title: Application.displayName
+    onClosing: Utils.saveGeometry(window)
 
     FramelessHelper.onReady: {
         FramelessHelper.titleBarItem = titleBar;
         FramelessHelper.setSystemButton(titleBar.minimizeButton, FramelessHelperConstants.Minimize);
         FramelessHelper.setSystemButton(titleBar.maximizeButton, FramelessHelperConstants.Maximize);
         FramelessHelper.setSystemButton(titleBar.closeButton, FramelessHelperConstants.Close);
-        FramelessHelper.moveWindowToDesktopCenter();
+        if (!Utils.restoreGeometry(window)) {
+            FramelessHelper.moveWindowToDesktopCenter();
+        }
         window.visible = true;
     }
 
     DesktopWallpaper {
         id: wallpaper
         anchors {
-            top: titleBar.top
+            top: window.topBorderBottom
             bottom: parent.bottom
             left: parent.left
             right: parent.right
@@ -60,13 +63,22 @@ FramelessWindow {
     AcrylicMaterial {
         id: acrylic
         anchors {
-            top: titleBar.top
+            top: window.topBorderBottom
             bottom: parent.bottom
             left: parent.left
             right: parent.right
         }
         source: wallpaper
-        theme: AcrylicMaterial.System
+        theme: {
+            switch (Theme.preferredTheme) {
+            case Theme.Light:
+                return AcrylicMaterial.Light;
+            case Theme.Dark:
+                return AcrylicMaterial.Dark;
+            case Theme.System:
+                return AcrylicMaterial.System;
+            }
+        }
     }
 
     Rectangle {
@@ -77,32 +89,32 @@ FramelessWindow {
             right: parent.right
         }
         height: 80
-        color: Qt.color("transparent")
+        color: window.color
 
         RowLayout {
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                left: parent.left
-            }
-            spacing: 5
+            anchors.fill: parent
+            spacing: Theme.separatorSize
 
             Rectangle {
                 Layout.fillHeight: true
-                width: 5
-                color: Qt.color("darkGray")
+                width: Theme.separatorSize
+                color: Theme.separatorColor
             }
 
             ColumnLayout {
+                Layout.fillHeight: true
+
                 Label {
-                    font.pointSize: 12
+                    font.pointSize: Theme.largeTitleFontSize
                     color: Theme.labelColor
                     text: qsTr("Internet Address")
                 }
 
                 ClickableLabel {
-                    Layout.fillWidth: true
-                    font.pointSize: 16
+                    font {
+                        pointSize: Theme.largeContentFontSize
+                        bold: true
+                    }
                     color: Theme.labelColor
                     text: NetworkInformation.getInternetIPAddress(NetworkInformation.IPv4)
                 }
@@ -110,23 +122,32 @@ FramelessWindow {
 
             Rectangle {
                 Layout.fillHeight: true
-                width: 5
-                color: Qt.color("darkGray")
+                width: Theme.separatorSize
+                color: Theme.separatorColor
             }
 
             ColumnLayout {
+                Layout.fillHeight: true
+
                 Label {
-                    font.pointSize: 12
+                    font.pointSize: Theme.largeTitleFontSize
                     color: Theme.labelColor
                     text: qsTr("Local Address")
                 }
 
                 ClickableLabel {
-                    Layout.fillWidth: true
-                    font.pointSize: 16
+                    font {
+                        pointSize: Theme.largeContentFontSize
+                        bold: true
+                    }
                     color: Theme.labelColor
                     text: NetworkInformation.getLocalIPAddress(NetworkInformation.IPv4)
                 }
+            }
+
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
             }
         }
     }
@@ -140,8 +161,8 @@ FramelessWindow {
             right: parent.right
         }
         clip: true
-        cellWidth: 500
-        cellHeight: 380
+        cellWidth: Theme.infoPanelSize.width
+        cellHeight: Theme.infoPanelSize.height
         model: networkAdapterModel
         delegate: Rectangle {
             required property string name
@@ -154,18 +175,18 @@ FramelessWindow {
             id: delegate
             width: networkAdapterGrid.cellWidth
             height: networkAdapterGrid.cellHeight
-            color: Qt.color("transparent")
+            color: window.color
 
             Rectangle {
                 anchors {
                     fill: parent
                     margins: 10
                 }
-                color: Qt.rgba(0, 0, 0, 0.5)
+                color: Theme.infoPanelColor
 
                 ColumnLayout {
                     anchors.fill: parent
-                    spacing: 5
+                    spacing: Theme.separatorSize
 
                     Rectangle {
                         Layout.fillWidth: true
@@ -181,7 +202,7 @@ FramelessWindow {
                                 bold: true
                                 pointSize: Theme.titleFontSize
                             }
-                            color: Theme.labelColor
+                            color: Qt.color("white")
                             text: delegate.name
                             verticalAlignment: Text.AlignVCenter
                         }
@@ -198,7 +219,6 @@ FramelessWindow {
                     }
 
                     ClickableLabel {
-                        Layout.fillWidth: true
                         Layout.leftMargin: 10
                         font.pointSize: Theme.contentFontSize
                         color: Theme.labelColor
@@ -216,7 +236,6 @@ FramelessWindow {
                     }
 
                     ClickableLabel {
-                        Layout.fillWidth: true
                         Layout.leftMargin: 10
                         font.pointSize: Theme.contentFontSize
                         color: Theme.labelColor
@@ -234,7 +253,6 @@ FramelessWindow {
                     }
 
                     ClickableLabel {
-                        Layout.fillWidth: true
                         Layout.leftMargin: 10
                         font.pointSize: Theme.contentFontSize
                         color: Theme.labelColor
@@ -252,7 +270,6 @@ FramelessWindow {
                     }
 
                     ClickableLabel {
-                        Layout.fillWidth: true
                         Layout.leftMargin: 10
                         font.pointSize: Theme.contentFontSize
                         color: Theme.labelColor
@@ -270,7 +287,6 @@ FramelessWindow {
                     }
 
                     ClickableLabel {
-                        Layout.fillWidth: true
                         Layout.leftMargin: 10
                         font.pointSize: Theme.contentFontSize
                         color: Theme.labelColor
@@ -295,32 +311,32 @@ FramelessWindow {
             right: parent.right
         }
         height: 80
-        color: Qt.color("transparent")
+        color: window.color
 
         RowLayout {
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                left: parent.left
-            }
-            spacing: 5
+            anchors.fill: parent
+            spacing: Theme.separatorSize
 
             Rectangle {
                 Layout.fillHeight: true
-                width: 5
-                color: Qt.color("darkGray")
+                width: Theme.separatorSize
+                color: Theme.separatorColor
             }
 
             ColumnLayout {
+                Layout.fillHeight: true
+
                 Label {
-                    font.pointSize: 12
+                    font.pointSize: Theme.largeTitleFontSize
                     color: Theme.labelColor
                     text: qsTr("Network Status")
                 }
 
                 Label {
-                    Layout.fillWidth: true
-                    font.pointSize: 16
+                    font {
+                        pointSize: Theme.largeContentFontSize
+                        bold: true
+                    }
                     color: Theme.labelColor
                     text: {
                         switch (NetworkInformation.networkStatus) {
@@ -337,20 +353,24 @@ FramelessWindow {
 
             Rectangle {
                 Layout.fillHeight: true
-                width: 5
-                color: Qt.color("darkGray")
+                width: Theme.separatorSize
+                color: Theme.separatorColor
             }
 
             ColumnLayout {
+                Layout.fillHeight: true
+
                 Label {
-                    font.pointSize: 12
+                    font.pointSize: Theme.largeTitleFontSize
                     color: Theme.labelColor
                     text: qsTr("Transport Medium")
                 }
 
                 Label {
-                    Layout.fillWidth: true
-                    font.pointSize: 16
+                    font {
+                        pointSize: Theme.largeContentFontSize
+                        bold: true
+                    }
                     color: Theme.labelColor
                     text: {
                         switch (NetworkInformation.transportMedium) {
@@ -371,20 +391,24 @@ FramelessWindow {
 
             Rectangle {
                 Layout.fillHeight: true
-                width: 5
-                color: Qt.color("darkGray")
+                width: Theme.separatorSize
+                color: Theme.separatorColor
             }
 
             ColumnLayout {
+                Layout.fillHeight: true
+
                 Label {
-                    font.pointSize: 12
+                    font.pointSize: Theme.largeTitleFontSize
                     color: Theme.labelColor
                     text: qsTr("Behind Captive Portal")
                 }
 
                 Label {
-                    Layout.fillWidth: true
-                    font.pointSize: 16
+                    font {
+                        pointSize: Theme.largeContentFontSize
+                        bold: true
+                    }
                     color: Theme.labelColor
                     text: NetworkInformation.behindCaptivePortal ? qsTr("YES") : qsTr("NO")
                 }
@@ -392,23 +416,41 @@ FramelessWindow {
 
             Rectangle {
                 Layout.fillHeight: true
-                width: 5
-                color: Qt.color("darkGray")
+                width: Theme.separatorSize
+                color: Theme.separatorColor
             }
 
             ColumnLayout {
+                Layout.fillHeight: true
+
                 Label {
-                    font.pointSize: 12
+                    font.pointSize: Theme.largeTitleFontSize
                     color: Theme.labelColor
                     text: qsTr("Metered")
                 }
 
                 Label {
-                    Layout.fillWidth: true
-                    font.pointSize: 16
+                    font {
+                        pointSize: Theme.largeContentFontSize
+                        bold: true
+                    }
                     color: Theme.labelColor
                     text: NetworkInformation.metered ? qsTr("YES") : qsTr("NO")
                 }
+            }
+
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+
+            RefreshButton {
+                onClicked: networkAdapterModel.populate()
+            }
+
+            Item {
+                Layout.fillHeight: true
+                width: Theme.separatorSize
             }
         }
     }
@@ -422,6 +464,6 @@ FramelessWindow {
         }
         titleLabel.visible: false
         useAlternativeBackground: true
-        color: Qt.color("transparent")
+        color: window.color
     }
 }

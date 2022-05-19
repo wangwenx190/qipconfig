@@ -84,11 +84,13 @@ set(QTACRYLICMATERIAL_BUILD_STATIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS
     Core Concurrent Network Gui ShaderTools Quick
+    QuickControls2
 )
 
 qt_add_executable(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
+    resources.qrc
     networkadapter.h
     networkadaptermodel.h networkadaptermodel.cpp
     networkinformation.h networkinformation.cpp
@@ -105,7 +107,9 @@ if(WIN32)
     )
 endif()
 
-set(QML_SOURCES ClickableLabel.qml MainWindow.qml)
+set(QML_SOURCES
+    RefreshButton.qml ClickableLabel.qml MainWindow.qml
+)
 
 qt_add_qml_module(${PROJECT_NAME}
     URI ${PROJECT_NAME}
@@ -142,7 +146,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt::CorePrivate Qt::Concurrent Qt::Network
-    Qt::GuiPrivate Qt::Quick
+    Qt::GuiPrivate Qt::Quick Qt::QuickControls2
     FramelessHelperCore FramelessHelperQuick
     QtAcrylicMaterial
 )

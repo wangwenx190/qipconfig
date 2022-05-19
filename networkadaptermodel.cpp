@@ -41,7 +41,7 @@ QVariant NetworkAdapterModel::data(const QModelIndex &index, const int role) con
         return {};
     }
     const int row = index.row();
-    if ((row < 0) || (row >= m_adapters.count())) {
+    if ((row < 0) || (row >= rowCount())) {
         return {};
     }
     const int column = index.column();
@@ -91,7 +91,10 @@ QVariant NetworkAdapterModel::headerData(const int section, const Qt::Orientatio
         return {};
     }
     if (orientation == Qt::Vertical) {
-        return ((section < 0) ? QString{} : QString::number(section));
+        return (((section < 0) || (section >= rowCount())) ? QString{} : QString::number(section));
+    }
+    if ((section < 0) || (section >= columnCount())) {
+        return {};
     }
     switch (section) {
     case 0:

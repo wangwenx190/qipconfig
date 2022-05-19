@@ -30,6 +30,7 @@
 #include <QtQml/qqmlcontext.h>
 #include <QtQuick/qsgrendererinterface.h>
 #include <QtQuick/qquickwindow.h>
+#include <QtQuickControls2/qquickstyle.h>
 #include <framelessquickmodule.h>
 #include <qtacrylicmaterialplugin.h>
 #include "themehelper.h"
@@ -123,12 +124,12 @@ int main(int argc, char *argv[])
     commandLine.addOption(themeOption);
 
     const QCommandLineOption languageOption(u"language"_qs,
-        QCoreApplication::translate("main", "Set the application language to <language>. Available values: zh-hans, en-us."),
+        QCoreApplication::translate("main", "Set the application language to <language>. Available values: zh-hans, en-us, auto."),
         QCoreApplication::translate("main", "language"));
     commandLine.addOption(languageOption);
 
     const QCommandLineOption graphicsApiOption(u"graphics-api"_qs,
-        QCoreApplication::translate("main", "Set the rendering 3D graphics API to <API>. Available values: d3d11, vulkan, metal, opengl, software."),
+        QCoreApplication::translate("main", "Set the rendering 3D graphics API to <API>. Available values: d3d11, vulkan, metal, opengl, software, auto."),
         QCoreApplication::translate("main", "API"));
     commandLine.addOption(graphicsApiOption);
 
@@ -144,6 +145,8 @@ int main(int argc, char *argv[])
     if (preferredGraphicsApi.has_value()) {
         QQuickWindow::setGraphicsApi(preferredGraphicsApi.value());
     }
+
+    QQuickStyle::setStyle(u"Basic"_qs);
 
     QNetworkProxyFactory::setUseSystemConfiguration(commandLine.isSet(useSystemProxyOption));
 

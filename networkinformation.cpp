@@ -6,6 +6,9 @@
 #include <QtNetwork/qnetworkreply.h>
 #include <QtNetwork/qnetworkinformation.h>
 
+static constexpr const int MAX_TRANSFER_TIMEOUT = 1000 * 10; // 10s
+static constexpr const int MAX_RETRY_TIMES = 10;
+
 NetworkInformation::NetworkInformation(QObject *parent) : QObject(parent)
 {
     qRegisterMetaType<AddressType>();
@@ -105,18 +108,41 @@ QString NetworkInformation::getLocalIPAddress(const AddressType type) const
 
 QString NetworkInformation::getInternetIPAddress(const AddressType type) const
 {
-#if 0
-    Q_UNUSED(type);
-    const QFuture<QString> future = QtConcurrent::run([]() -> QString {
+    if (networkStatus() != NetworkStatus::Online) {
+        return tr("NOT AVAILABLE");
+    }
+    const QFuture<QString> future = QtConcurrent::run([type]() -> QString {
         QNetworkAccessManager manager;
         manager.setAutoDeleteReplies(true);
-        const QPointer<QNetworkReply> reply = manager.get(QNetworkRequest(QUrl(u"123"_qs)));
-        const QString data = QString::fromUtf8(reply->readAll());
-        return data;
+        manager.setRedirectPolicy(QNetworkRequest::ManualRedirectPolicy);
+        manager.setStrictTransportSecurityEnabled(true);
+        // We need to set a timeout value explicitly because the default setting
+        // of QNetworkAccessManager is zero which means unlimited timeout.
+        manager.setTransferTimeout(MAX_TRANSFER_TIMEOUT);
+        int triedTimes = 0;
+        Q_FOREVER {
+            if (triedTimes >= MAX_RETRY_TIMES) {
+                return tr("BEYOND RETRY LIMIT");
+            }
+            ++triedTimes;
+            const QPointer<QNetworkReply> reply = manager.get(QNetworkRequest(QUrl(u"https://api64.ipify.org"_qs)));
+            const QString data = QString::fromUtf8(reply->readAll());
+            if (data.isEmpty()) {
+                qWarning() << "The received data is empty.";
+                continue;
+            }
+            const QHostAddress address(data);
+            if (address.isNull() || address.isLoopback()) {
+                qWarning() << "Skipping null and loopback IP addresses ...";
+                continue;
+            }
+            if ((type == AddressType::IPv4) && (address.protocol() == QAbstractSocket::IPv4Protocol)) {
+                return address.toString();
+            }
+            if ((type == AddressType::IPv6) && (address.protocol() == QAbstractSocket::IPv6Protocol)) {
+                return QHostAddress(address.toIPv6Address()).toString();
+            }
+        }
     });
     return future.result();
-#else
-    Q_UNUSED(type);
-    return {};
-#endif
 }
