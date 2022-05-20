@@ -101,6 +101,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     theme.h theme.cpp
     themehelper.h themehelper.cpp
     translationmanager.h translationmanager.cpp
+    developerinformation.h developerinformation.cpp
     main.cpp
 )
 

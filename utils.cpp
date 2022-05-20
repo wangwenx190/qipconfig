@@ -21,6 +21,30 @@ static const QString kStateKey = u"Window/State"_qs;
     return uri;
 }
 
+[[nodiscard]] static inline QByteArray encrypt(const QString &str)
+{
+    Q_ASSERT(!str.isEmpty());
+    if (str.isEmpty()) {
+        return {};
+    }
+    const QByteArray ba = str.toUtf8();
+    return ba.toBase64(kEncryptOptions);
+}
+
+[[nodiscard]] static inline QString decrypt(const QByteArray &ba)
+{
+    Q_ASSERT(!ba.isEmpty());
+    if (ba.isEmpty()) {
+        return {};
+    }
+    const QByteArray::FromBase64Result result = QByteArray::fromBase64Encoding(ba, kEncryptOptions);
+    if (!result) {
+        qWarning() << "Failed to decrypt Base64 data.";
+        return {};
+    }
+    return QString::fromUtf8(*result);
+}
+
 [[nodiscard]] static inline QByteArray encode(const QVariant &var)
 {
     Q_ASSERT(var.isValid());
@@ -30,22 +54,17 @@ static const QString kStateKey = u"Window/State"_qs;
     QByteArray result = {};
     QDataStream stream(&result, QDataStream::WriteOnly);
     stream.setVersion(kFormatVersion);
-    stream << kUniqueIdentifier << applicationUri() << var;
-    return result.toBase64(kEncryptOptions);
+    stream << kUniqueIdentifier << encrypt(applicationUri()) << var;
+    return result;
 }
 
-[[nodiscard]] static inline QVariant decode(const QByteArray &data)
+[[nodiscard]] static inline QVariant decode(const QByteArray &ba)
 {
-    Q_ASSERT(!data.isEmpty());
-    if (data.isEmpty()) {
+    Q_ASSERT(!ba.isEmpty());
+    if (ba.isEmpty()) {
         return {};
     }
-    const QByteArray::FromBase64Result ba = QByteArray::fromBase64Encoding(data, kEncryptOptions);
-    if (!ba) {
-        qWarning() << "Settings: failed to decrypt Base64 data.";
-        return {};
-    }
-    QDataStream stream(*ba);
+    QDataStream stream(ba);
     stream.setVersion(kFormatVersion);
     quint32 identifier = 0;
     stream >> identifier;
@@ -53,9 +72,9 @@ static const QString kStateKey = u"Window/State"_qs;
         qWarning() << "Settings: data format not valid.";
         return {};
     }
-    QString uri = {};
+    QByteArray uri = {};
     stream >> uri;
-    if (uri != applicationUri()) {
+    if (decrypt(uri) != applicationUri()) {
         qWarning() << "Settings: product URI does not match.";
         return {};
     }

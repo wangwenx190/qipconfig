@@ -15,7 +15,7 @@ class TranslationManager : public QObject
     Q_PROPERTY(Language language READ getLanguage WRITE setLanguage NOTIFY languageChanged FINAL)
 
 public:
-    enum class Language { en_US, zh_Hans, Default = en_US };
+    enum class Language { en_US = 0, zh_Hans = 1, Default = en_US };
     Q_ENUM(Language)
 
     explicit TranslationManager(QObject *parent = nullptr);
@@ -28,12 +28,14 @@ public:
     [[nodiscard]] Language getLanguage() const;
     void setLanguage(const Language lang);
 
+private:
+    void uninstallAllTranslators();
+
 Q_SIGNALS:
     void languageChanged();
 
 private:
     Language m_language = Language::en_US;
     QPointer<QQmlEngine> m_engine = nullptr;
-    QScopedPointer<QTranslator> m_translator_zh_Hans;
 };
 

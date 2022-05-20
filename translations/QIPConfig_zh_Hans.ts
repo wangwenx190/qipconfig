@@ -187,42 +187,42 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="138"/>
+        <location filename="../main.cpp" line="139"/>
         <source>A convenient tool to show your network configuration.</source>
         <translation>一个用来显示您的网络配置的便捷工具。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="143"/>
+        <location filename="../main.cpp" line="144"/>
         <source>Set the application theme to &lt;theme&gt;. Available values: light, dark, system.</source>
         <translation>将应用程序主题设置为&lt;主题&gt;。可用的值为：light、dark、system。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="144"/>
+        <location filename="../main.cpp" line="145"/>
         <source>theme</source>
         <translation>主题</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="148"/>
+        <location filename="../main.cpp" line="149"/>
         <source>Set the application language to &lt;language&gt;. Available values: zh-hans, en-us, auto.</source>
         <translation>将应用程序语言设置为&lt;语言&gt;。可用的值为：zh-hans、en-us、auto。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="149"/>
+        <location filename="../main.cpp" line="150"/>
         <source>language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="153"/>
+        <location filename="../main.cpp" line="154"/>
         <source>Set the renderer&apos;s 3D graphics API to &lt;API&gt;. Available values: d3d11, vulkan, metal, opengl, software, auto.</source>
         <translation>将渲染引擎的三维图形接口设置为&lt;接口&gt;。可用的值为：d3d11、vulkan、metal、opengl、software、auto。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="158"/>
+        <location filename="../main.cpp" line="159"/>
         <source>Use the system network proxy configuration.</source>
         <translation>使用系统网络代理设置。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="154"/>
+        <location filename="../main.cpp" line="155"/>
         <source>API</source>
         <translation>接口</translation>
     </message>

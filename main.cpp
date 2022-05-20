@@ -63,7 +63,8 @@ FRAMELESSHELPER_USE_NAMESPACE
     if (input.isEmpty()) {
         return defaultLanguage;
     }
-    if (isInsensitiveEqual(input, u"zh-hans"_qs)) {
+    if (isInsensitiveEqual(input, u"zh-hans-cn"_qs) || isInsensitiveEqual(input, u"zh-hans"_qs)
+        || isInsensitiveEqual(input, u"zh-cn"_qs) || isInsensitiveEqual(input, u"zh"_qs)) {
         return TranslationManager::Language::zh_Hans;
     }
     return defaultLanguage;
