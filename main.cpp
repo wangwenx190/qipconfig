@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+#include <QtCore/qlocale.h>
 #include <QtCore/qloggingcategory.h>
 #include <QtCore/qcommandlineparser.h>
 #include <QtNetwork/qnetworkproxy.h>
@@ -33,6 +34,7 @@
 #include <QtQuickControls2/qquickstyle.h>
 #include <framelessquickmodule.h>
 #include <qtacrylicmaterialplugin.h>
+#include "translationmanager.h"
 #include "themehelper.h"
 #include "networkadaptermodel.h"
 
@@ -46,6 +48,25 @@ FRAMELESSHELPER_USE_NAMESPACE
         return false;
     }
     return (QString::compare(lhs, rhs, Qt::CaseInsensitive) == 0);
+}
+
+[[nodiscard]] static inline TranslationManager::Language getPreferredLanguage(const QString &input)
+{
+    static const TranslationManager::Language defaultLanguage = []() -> TranslationManager::Language {
+        const QString systemUiLanguage = QLocale::system().uiLanguages().constFirst();
+        if ((systemUiLanguage == u"zh-Hans-CN"_qs)
+            || (systemUiLanguage == u"zh-CN"_qs) || (systemUiLanguage == u"zh"_qs)) {
+            return TranslationManager::Language::zh_Hans;
+        }
+        return TranslationManager::Language::en_US;
+    }();
+    if (input.isEmpty()) {
+        return defaultLanguage;
+    }
+    if (isInsensitiveEqual(input, u"zh-hans"_qs)) {
+        return TranslationManager::Language::zh_Hans;
+    }
+    return defaultLanguage;
 }
 
 [[nodiscard]] static inline ThemeHelper::Theme getPreferredTheme(const QString &input)
@@ -129,12 +150,12 @@ int main(int argc, char *argv[])
     commandLine.addOption(languageOption);
 
     const QCommandLineOption graphicsApiOption(u"graphics-api"_qs,
-        QCoreApplication::translate("main", "Set the rendering 3D graphics API to <API>. Available values: d3d11, vulkan, metal, opengl, software, auto."),
+        QCoreApplication::translate("main", "Set the renderer's 3D graphics API to <API>. Available values: d3d11, vulkan, metal, opengl, software, auto."),
         QCoreApplication::translate("main", "API"));
     commandLine.addOption(graphicsApiOption);
 
     const QCommandLineOption useSystemProxyOption(u"use-system-proxy"_qs,
-        QCoreApplication::translate("main", "Use the system proxy configuration."));
+        QCoreApplication::translate("main", "Use the system network proxy configuration."));
     commandLine.addOption(useSystemProxyOption);
 
     commandLine.process(application);
@@ -155,6 +176,8 @@ int main(int argc, char *argv[])
     NetworkAdapterModel model;
 
     QQmlApplicationEngine engine;
+
+    TranslationManager::instance()->setQmlEngine(&engine);
 
     FramelessHelper::Quick::registerTypes(&engine);
     QtAcrylicMaterial::registerTypes(&engine);
@@ -179,6 +202,8 @@ int main(int argc, char *argv[])
         }, Qt::QueuedConnection);
 
     engine.load(mainUrl);
+
+    TranslationManager::instance()->setLanguage(getPreferredLanguage(commandLine.value(languageOption)));
 
     return QCoreApplication::exec();
 }

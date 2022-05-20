@@ -5,12 +5,21 @@
 #include <QtGui/qguiapplication.h>
 #include <QtGui/qclipboard.h>
 
+static constexpr const QByteArray::Base64Options kEncryptOptions = (QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals);
 static constexpr const QDataStream::Version kFormatVersion = QDataStream::Qt_6_3;
-
-static constexpr const quint32 kUniqueIdentifier = 0xA1B2C3D4;
+static constexpr const quint32 kUniqueIdentifier = 0xA0B0C0D0;
 
 static const QString kGeometryKey = u"Window/Geometry"_qs;
 static const QString kStateKey = u"Window/State"_qs;
+
+[[nodiscard]] static inline QString applicationUri()
+{
+    static const QString uri = (u"org.%1.%2/%3"_qs).arg(
+          QCoreApplication::organizationName(),
+          QCoreApplication::applicationName(),
+          QCoreApplication::applicationVersion());
+    return uri;
+}
 
 [[nodiscard]] static inline QByteArray encode(const QVariant &var)
 {
@@ -21,18 +30,22 @@ static const QString kStateKey = u"Window/State"_qs;
     QByteArray result = {};
     QDataStream stream(&result, QDataStream::WriteOnly);
     stream.setVersion(kFormatVersion);
-    stream << kUniqueIdentifier << QCoreApplication::applicationName()
-           << QCoreApplication::applicationVersion() << var;
-    return result;
+    stream << kUniqueIdentifier << applicationUri() << var;
+    return result.toBase64(kEncryptOptions);
 }
 
-[[nodiscard]] static inline QVariant decode(const QByteArray &ba)
+[[nodiscard]] static inline QVariant decode(const QByteArray &data)
 {
-    Q_ASSERT(!ba.isEmpty());
-    if (ba.isEmpty()) {
+    Q_ASSERT(!data.isEmpty());
+    if (data.isEmpty()) {
         return {};
     }
-    QDataStream stream(ba);
+    const QByteArray::FromBase64Result ba = QByteArray::fromBase64Encoding(data, kEncryptOptions);
+    if (!ba) {
+        qWarning() << "Settings: failed to decrypt Base64 data.";
+        return {};
+    }
+    QDataStream stream(*ba);
     stream.setVersion(kFormatVersion);
     quint32 identifier = 0;
     stream >> identifier;
@@ -40,16 +53,10 @@ static const QString kStateKey = u"Window/State"_qs;
         qWarning() << "Settings: data format not valid.";
         return {};
     }
-    QString appName = {};
-    stream >> appName;
-    if (appName.compare(QCoreApplication::applicationName()) != 0) {
-        qWarning() << "Settings: product does not match.";
-        return {};
-    }
-    QString appVer = {};
-    stream >> appVer;
-    if (appVer.compare(QCoreApplication::applicationVersion()) != 0) {
-        qWarning() << "Settings: version does not match.";
+    QString uri = {};
+    stream >> uri;
+    if (uri != applicationUri()) {
+        qWarning() << "Settings: product URI does not match.";
         return {};
     }
     QVariant var = {};

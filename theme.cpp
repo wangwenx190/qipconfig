@@ -91,12 +91,17 @@ QColor Theme::infoPanelColor() const
 
 QSizeF Theme::windowSize() const
 {
-    return {1000, 800};
+    return {1020, 800};
 }
 
 QSizeF Theme::infoPanelSize() const
 {
-    return {500, 380};
+    return {500, 430};
+}
+
+qreal Theme::contentsMargin() const
+{
+    return 10;
 }
 
 bool Theme::eventFilter(QObject *object, QEvent *event)

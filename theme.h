@@ -26,6 +26,7 @@ class Theme : public QObject
     Q_PROPERTY(QColor infoPanelColor READ infoPanelColor NOTIFY themeChanged FINAL)
     Q_PROPERTY(QSizeF windowSize READ windowSize CONSTANT FINAL)
     Q_PROPERTY(QSizeF infoPanelSize READ infoPanelSize CONSTANT FINAL)
+    Q_PROPERTY(qreal contentsMargin READ contentsMargin CONSTANT FINAL)
 
 public:
     enum class ThemeType { Light, Dark, System, Default = Dark };
@@ -48,6 +49,7 @@ public:
     [[nodiscard]] QColor infoPanelColor() const;
     [[nodiscard]] QSizeF windowSize() const;
     [[nodiscard]] QSizeF infoPanelSize() const;
+    [[nodiscard]] qreal contentsMargin() const;
 
 public Q_SLOTS:
     void refresh();

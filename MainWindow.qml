@@ -86,14 +86,16 @@ FramelessWindow {
         anchors {
             top: titleBar.bottom
             left: parent.left
+            leftMargin: Theme.contentsMargin
             right: parent.right
+            rightMargin: Theme.contentsMargin
         }
         height: 80
         color: window.color
 
         RowLayout {
             anchors.fill: parent
-            spacing: Theme.separatorSize
+            spacing: Theme.contentsMargin
 
             Rectangle {
                 Layout.fillHeight: true
@@ -145,6 +147,56 @@ FramelessWindow {
                 }
             }
 
+            Rectangle {
+                Layout.fillHeight: true
+                width: Theme.separatorSize
+                color: Theme.separatorColor
+            }
+
+            ColumnLayout {
+                Layout.fillHeight: true
+
+                Label {
+                    font.pointSize: Theme.largeTitleFontSize
+                    color: Theme.labelColor
+                    text: qsTr("Local Host")
+                }
+
+                ClickableLabel {
+                    font {
+                        pointSize: Theme.largeContentFontSize
+                        bold: true
+                    }
+                    color: Theme.labelColor
+                    text: NetworkInformation.localHostName
+                }
+            }
+
+            Rectangle {
+                Layout.fillHeight: true
+                width: Theme.separatorSize
+                color: Theme.separatorColor
+            }
+
+            ColumnLayout {
+                Layout.fillHeight: true
+
+                Label {
+                    font.pointSize: Theme.largeTitleFontSize
+                    color: Theme.labelColor
+                    text: qsTr("Local Domain")
+                }
+
+                ClickableLabel {
+                    font {
+                        pointSize: Theme.largeContentFontSize
+                        bold: true
+                    }
+                    color: Theme.labelColor
+                    text: NetworkInformation.localDomainName
+                }
+            }
+
             Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -159,6 +211,7 @@ FramelessWindow {
             bottom: networkIndicatorPanel.top
             left: parent.left
             right: parent.right
+            margins: Theme.contentsMargin
         }
         clip: true
         cellWidth: Theme.infoPanelSize.width
@@ -180,13 +233,13 @@ FramelessWindow {
             Rectangle {
                 anchors {
                     fill: parent
-                    margins: 10
+                    margins: Theme.contentsMargin
                 }
                 color: Theme.infoPanelColor
 
                 ColumnLayout {
                     anchors.fill: parent
-                    spacing: Theme.separatorSize
+                    spacing: Theme.contentsMargin
 
                     Rectangle {
                         Layout.fillWidth: true
@@ -196,7 +249,7 @@ FramelessWindow {
                         Label {
                             anchors {
                                 fill: parent
-                                leftMargin: 10
+                                leftMargin: Theme.contentsMargin
                             }
                             font {
                                 bold: true
@@ -209,7 +262,7 @@ FramelessWindow {
                     }
 
                     Label {
-                        Layout.leftMargin: 10
+                        Layout.leftMargin: Theme.contentsMargin
                         color: Theme.labelColor
                         font {
                             bold: true
@@ -219,14 +272,14 @@ FramelessWindow {
                     }
 
                     ClickableLabel {
-                        Layout.leftMargin: 10
+                        Layout.leftMargin: Theme.contentsMargin
                         font.pointSize: Theme.contentFontSize
                         color: Theme.labelColor
                         text: delegate.hardwareAddress
                     }
 
                     Label {
-                        Layout.leftMargin: 10
+                        Layout.leftMargin: Theme.contentsMargin
                         color: Theme.labelColor
                         font {
                             bold: true
@@ -236,14 +289,14 @@ FramelessWindow {
                     }
 
                     ClickableLabel {
-                        Layout.leftMargin: 10
+                        Layout.leftMargin: Theme.contentsMargin
                         font.pointSize: Theme.contentFontSize
                         color: Theme.labelColor
                         text: delegate.ipv4Address
                     }
 
                     Label {
-                        Layout.leftMargin: 10
+                        Layout.leftMargin: Theme.contentsMargin
                         color: Theme.labelColor
                         font {
                             bold: true
@@ -253,14 +306,14 @@ FramelessWindow {
                     }
 
                     ClickableLabel {
-                        Layout.leftMargin: 10
+                        Layout.leftMargin: Theme.contentsMargin
                         font.pointSize: Theme.contentFontSize
                         color: Theme.labelColor
                         text: delegate.ipv6Address
                     }
 
                     Label {
-                        Layout.leftMargin: 10
+                        Layout.leftMargin: Theme.contentsMargin
                         color: Theme.labelColor
                         font {
                             bold: true
@@ -270,14 +323,14 @@ FramelessWindow {
                     }
 
                     ClickableLabel {
-                        Layout.leftMargin: 10
+                        Layout.leftMargin: Theme.contentsMargin
                         font.pointSize: Theme.contentFontSize
                         color: Theme.labelColor
                         text: delegate.netmask
                     }
 
                     Label {
-                        Layout.leftMargin: 10
+                        Layout.leftMargin: Theme.contentsMargin
                         color: Theme.labelColor
                         font {
                             bold: true
@@ -287,7 +340,7 @@ FramelessWindow {
                     }
 
                     ClickableLabel {
-                        Layout.leftMargin: 10
+                        Layout.leftMargin: Theme.contentsMargin
                         font.pointSize: Theme.contentFontSize
                         color: Theme.labelColor
                         text: delegate.broadcastAddress
@@ -307,15 +360,18 @@ FramelessWindow {
         id: networkIndicatorPanel
         anchors {
             bottom: parent.bottom
+            bottomMargin: Theme.contentsMargin
             left: parent.left
+            leftMargin: Theme.contentsMargin
             right: parent.right
+            rightMargin: Theme.contentsMargin
         }
         height: 80
         color: window.color
 
         RowLayout {
             anchors.fill: parent
-            spacing: Theme.separatorSize
+            spacing: Theme.contentsMargin
 
             Rectangle {
                 Layout.fillHeight: true
@@ -446,11 +502,6 @@ FramelessWindow {
 
             RefreshButton {
                 onClicked: networkAdapterModel.populate()
-            }
-
-            Item {
-                Layout.fillHeight: true
-                width: Theme.separatorSize
             }
         }
     }

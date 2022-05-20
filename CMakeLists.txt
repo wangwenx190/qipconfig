@@ -82,9 +82,12 @@ set(FRAMELESSHELPER_BUILD_EXAMPLES OFF)
 set(QTACRYLICMATERIAL_BUILD_DEMO OFF)
 set(QTACRYLICMATERIAL_BUILD_STATIC ON)
 
+set(imports_dir ${PROJECT_BINARY_DIR}/imports)
+set(translations_dir ${CMAKE_CURRENT_SOURCE_DIR}/translations)
+
 find_package(Qt6 REQUIRED COMPONENTS
     Core Concurrent Network Gui ShaderTools Quick
-    QuickControls2
+    QuickControls2 LinguistTools
 )
 
 qt_add_executable(${PROJECT_NAME})
@@ -97,6 +100,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     utils.h utils.cpp
     theme.h theme.cpp
     themehelper.h themehelper.cpp
+    translationmanager.h translationmanager.cpp
     main.cpp
 )
 
@@ -118,8 +122,17 @@ qt_add_qml_module(${PROJECT_NAME}
     DEPENDENCIES
         org.wangwenx190.FramelessHelper
         org.wangwenx190.QtAcrylicMaterial
-    #IMPORT_PATH ${PROJECT_BINARY_DIR}/imports
+    #IMPORT_PATH ${imports_dir}
     QML_FILES ${QML_SOURCES}
+)
+
+qt_add_translations(${PROJECT_NAME}
+    TS_FILES
+        ${translations_dir}/${PROJECT_NAME}_zh_Hans.ts
+    LUPDATE_OPTIONS
+        -no-obsolete -no-recursive
+    LRELEASE_OPTIONS
+        -compress -nounfinished -removeidentical
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

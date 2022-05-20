@@ -29,29 +29,34 @@ import QIPConfig
 Label {
     id: label
 
-    MouseArea {
+    QtObject {
+        id: data
+
         property bool alternative: false
         readonly property real fontSizeDiff: 2
+        readonly property string defaultToolTipText: qsTr("Click to copy it's text to the clipboard.")
+    }
 
+    MouseArea {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
         onEntered: {
             if (label.font.bold) {
-                mouseArea.alternative = true;
-                label.font.pointSize += mouseArea.fontSizeDiff;
+                data.alternative = true;
+                label.font.pointSize += data.fontSizeDiff;
             } else {
                 label.font.bold = true;
             }
         }
         onExited: {
-            if (mouseArea.alternative) {
-                mouseArea.alternative = false;
-                label.font.pointSize -= mouseArea.fontSizeDiff;
+            if (data.alternative) {
+                data.alternative = false;
+                label.font.pointSize -= data.fontSizeDiff;
             } else {
                 label.font.bold = false;
             }
-            toolTip.text = qsTr("Click to copy it's text to the clipboard.");
+            toolTip.text = data.defaultToolTipText;
         }
         onClicked: {
             Utils.copyToClipboard(label.text);
@@ -62,7 +67,7 @@ Label {
     ToolTip {
         id: toolTip
         delay: 0
-        text: qsTr("Click to copy it's text to the clipboard.")
+        text: data.defaultToolTipText
         visible: mouseArea.containsMouse
     }
 }

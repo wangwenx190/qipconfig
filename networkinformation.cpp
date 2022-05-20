@@ -79,6 +79,16 @@ bool NetworkInformation::isMetered() const
     return false;
 }
 
+QString NetworkInformation::localHostName() const
+{
+    return QHostInfo::localHostName();
+}
+
+QString NetworkInformation::localDomainName() const
+{
+    return QHostInfo::localDomainName();
+}
+
 QString NetworkInformation::getLocalIPAddress(const AddressType type) const
 {
     const QHostInfo info = QHostInfo::fromName(QHostInfo::localHostName());
@@ -122,7 +132,7 @@ QString NetworkInformation::getInternetIPAddress(const AddressType type) const
         int triedTimes = 0;
         Q_FOREVER {
             if (triedTimes >= MAX_RETRY_TIMES) {
-                return tr("BEYOND RETRY LIMIT");
+                return tr("ERROR");
             }
             ++triedTimes;
             const QPointer<QNetworkReply> reply = manager.get(QNetworkRequest(QUrl(u"https://api64.ipify.org"_qs)));
