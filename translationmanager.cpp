@@ -18,6 +18,7 @@ Q_GLOBAL_STATIC(TranslationManager, translationManager)
 
 TranslationManager::TranslationManager(QObject *parent) : QObject(parent)
 {
+    qRegisterMetaType<Language>();
     for (int i = g_translatorOffset; i != g_translatorCount; ++i) {
         auto translator = new QTranslator;
         if (translator->load(g_availableTranslators[i].fileName, u":/i18n"_qs)) {
