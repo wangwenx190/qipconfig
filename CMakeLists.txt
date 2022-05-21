@@ -116,6 +116,10 @@ if(WIN32)
     target_sources(${PROJECT_NAME} PRIVATE
         app.rc app.manifest theme_win.cpp
     )
+elseif(APPLE)
+    target_sources(${PROJECT_NAME} PRIVATE theme_mac.mm)
+elseif(UNIX)
+    target_sources(${PROJECT_NAME} PRIVATE theme_linux.cpp)
 endif()
 
 set(QML_SOURCES
