@@ -6,3 +6,7 @@
 	path = 3rdparty/qtacrylicmaterial
 	url = https://github.com/wangwenx190/qtacrylicmaterial.git
 	branch = main
+[submodule "3rdparty/singleapplication"]
+	path = 3rdparty/singleapplication
+	url = https://github.com/itay-grudev/SingleApplication.git
+	branch = master
