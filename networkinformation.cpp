@@ -1,19 +1,70 @@
 #include "networkinformation.h"
-#include <QtConcurrent/qtconcurrentrun.h>
+#include <QtCore/qjsondocument.h>
+#include <QtCore/qjsonobject.h>
 #include <QtNetwork/qhostinfo.h>
 #include <QtNetwork/qnetworkaccessmanager.h>
 #include <QtNetwork/qnetworkrequest.h>
 #include <QtNetwork/qnetworkreply.h>
 #include <QtNetwork/qnetworkinformation.h>
 
-static constexpr const int MAX_TRANSFER_TIMEOUT = 1000 * 10; // 10s
-static constexpr const int MAX_RETRY_TIMES = 10;
-
 NetworkInformation::NetworkInformation(QObject *parent) : QObject(parent)
 {
     qRegisterMetaType<AddressType>();
     qRegisterMetaType<NetworkStatus>();
     qRegisterMetaType<TransportMedium>();
+    m_networkManager.reset(new QNetworkAccessManager(this));
+    m_networkManager->setAutoDeleteReplies(true);
+    m_networkManager->setRedirectPolicy(QNetworkRequest::ManualRedirectPolicy);
+    m_networkManager->setStrictTransportSecurityEnabled(true);
+    // We need to set a timeout value explicitly because the default setting
+    // of QNetworkAccessManager is zero which means unlimited timeout.
+    m_networkManager->setTransferTimeout(QNetworkRequest::DefaultTransferTimeoutConstant);
+    connect(m_networkManager.get(), &QNetworkAccessManager::finished, this, [this](QNetworkReply *reply){
+        Q_ASSERT(reply);
+        if (!reply) {
+            return;
+        }
+        QJsonParseError jsonErr = {};
+        const QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll(), &jsonErr);
+        if (jsonErr.error != QJsonParseError::NoError) {
+            qWarning() << jsonErr.errorString();
+            return;
+        }
+        if (jsonDoc.isNull() || jsonDoc.isEmpty() || !jsonDoc.isObject()) {
+            qWarning() << "The JSON document is not valid.";
+            return;
+        }
+        const QJsonObject jsonObj = jsonDoc.object();
+        if (jsonObj.isEmpty() || !jsonObj.contains(u"ip"_qs)) {
+            qWarning() << "The JSON object does not contain the IP information.";
+            return;
+        }
+        const QJsonValue jsonVal = jsonObj.value(u"ip"_qs);
+        if (jsonVal.isNull() || jsonVal.isUndefined() || !jsonVal.isString()) {
+            qWarning() << "The JSON value is not expected.";
+            return;
+        }
+        const QString ip = jsonVal.toString();
+        if (ip.isEmpty()) {
+            qWarning() << "The received IP information is empty.";
+            return;
+        }
+        const QHostAddress address(ip);
+        if (address.isNull() || address.isLoopback()) {
+            qWarning() << "Received null or loopback IP address.";
+            return;
+        }
+        if (address.protocol() == QAbstractSocket::IPv4Protocol) {
+            m_internetAddressIPv4 = address.toString();
+            Q_EMIT internetAddressChanged();
+        }
+#if 0
+        else if (address.protocol() == QAbstractSocket::IPv6Protocol) {
+            m_internetAddressIPv6 = QHostAddress(address.toIPv6Address()).toString();
+            Q_EMIT internetAddressChanged();
+        }
+#endif
+    });
     if (QNetworkInformation::loadDefaultBackend()) {
         if (const QNetworkInformation * const ni = QNetworkInformation::instance()) {
             connect(ni, &QNetworkInformation::reachabilityChanged, this, [this](QNetworkInformation::Reachability){ Q_EMIT networkStatusChanged(); });
@@ -26,6 +77,7 @@ NetworkInformation::NetworkInformation(QObject *parent) : QObject(parent)
     } else {
         qWarning() << "Failed to load the default QNetworkInformation backend.";
     }
+    tryFetchInternetAddress();
 }
 
 NetworkInformation::~NetworkInformation() = default;
@@ -89,70 +141,49 @@ QString NetworkInformation::localDomainName() const
     return QHostInfo::localDomainName();
 }
 
-QString NetworkInformation::getLocalIPAddress(const AddressType type) const
-{
-    const QHostInfo info = QHostInfo::fromName(QHostInfo::localHostName());
-    if (info.error() != QHostInfo::NoError) {
-        qWarning() << info.errorString();
-        return {};
-    }
-    const QList<QHostAddress> addresses = info.addresses();
-    if (!addresses.isEmpty()) {
-        for (auto &&address : qAsConst(addresses)) {
-            if (address.isNull()) {
-                continue;
-            }
-            if (address.isLoopback()) {
-                continue;
-            }
-            if ((type == AddressType::IPv4) && (address.protocol() == QAbstractSocket::IPv4Protocol)) {
-                return address.toString();
-            }
-            if ((type == AddressType::IPv6) && (address.protocol() == QAbstractSocket::IPv6Protocol)) {
-                return QHostAddress(address.toIPv6Address()).toString();
-            }
-        }
-    }
-    return {};
-}
-
-QString NetworkInformation::getInternetIPAddress(const AddressType type) const
+QString NetworkInformation::internetAddress() const
 {
     if (networkStatus() != NetworkStatus::Online) {
         return tr("NOT AVAILABLE");
     }
-    const QFuture<QString> future = QtConcurrent::run([type]() -> QString {
-        QNetworkAccessManager manager;
-        manager.setAutoDeleteReplies(true);
-        manager.setRedirectPolicy(QNetworkRequest::ManualRedirectPolicy);
-        manager.setStrictTransportSecurityEnabled(true);
-        // We need to set a timeout value explicitly because the default setting
-        // of QNetworkAccessManager is zero which means unlimited timeout.
-        manager.setTransferTimeout(MAX_TRANSFER_TIMEOUT);
-        int triedTimes = 0;
-        Q_FOREVER {
-            if (triedTimes >= MAX_RETRY_TIMES) {
-                return tr("ERROR");
-            }
-            ++triedTimes;
-            const QPointer<QNetworkReply> reply = manager.get(QNetworkRequest(QUrl(u"https://api64.ipify.org"_qs)));
-            const QString data = QString::fromUtf8(reply->readAll());
-            if (data.isEmpty()) {
-                qWarning() << "The received data is empty.";
-                continue;
-            }
-            const QHostAddress address(data);
-            if (address.isNull() || address.isLoopback()) {
-                qWarning() << "Skipping null and loopback IP addresses ...";
-                continue;
-            }
-            if ((type == AddressType::IPv4) && (address.protocol() == QAbstractSocket::IPv4Protocol)) {
-                return address.toString();
-            }
-            if ((type == AddressType::IPv6) && (address.protocol() == QAbstractSocket::IPv6Protocol)) {
-                return QHostAddress(address.toIPv6Address()).toString();
-            }
+    if (m_internetAddressIPv4.isEmpty()) {
+        return tr("WAITING");
+    }
+    return m_internetAddressIPv4;
+}
+
+QString NetworkInformation::localAddress() const
+{
+    const QHostInfo info = QHostInfo::fromName(QHostInfo::localHostName());
+    if (info.error() != QHostInfo::NoError) {
+        qWarning() << info.errorString();
+        return tr("NOT AVAILABLE");
+    }
+    const QList<QHostAddress> addresses = info.addresses();
+    if (addresses.isEmpty()) {
+        return tr("NOT AVAILABLE");
+    }
+    for (auto &&address : qAsConst(addresses)) {
+        if (address.isNull() || address.isLoopback()) {
+            continue;
         }
-    });
-    return future.result();
+        if (address.protocol() == QAbstractSocket::IPv4Protocol) {
+            return address.toString();
+        }
+#if 0
+        else if (address.protocol() == QAbstractSocket::IPv6Protocol) {
+            return QHostAddress(address.toIPv6Address()).toString();
+        }
+#endif
+    }
+    return tr("NOT AVAILABLE");
+}
+
+void NetworkInformation::tryFetchInternetAddress()
+{
+    if (networkStatus() != NetworkStatus::Online) {
+        qWarning() << "Cannot fetch the Internet address due to there is no Internet access.";
+        return;
+    }
+    m_networkManager->get(QNetworkRequest(QUrl(u"https://api64.ipify.org?format=json"_qs)));
 }

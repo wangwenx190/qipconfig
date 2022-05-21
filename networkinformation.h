@@ -3,6 +3,10 @@
 #include <QtCore/qobject.h>
 #include <QtQml/qqmlregistration.h>
 
+QT_BEGIN_NAMESPACE
+class QNetworkAccessManager;
+QT_END_NAMESPACE
+
 class NetworkInformation : public QObject
 {
     Q_OBJECT
@@ -16,6 +20,8 @@ class NetworkInformation : public QObject
     Q_PROPERTY(bool metered READ isMetered NOTIFY meteredChanged FINAL)
     Q_PROPERTY(QString localHostName READ localHostName CONSTANT FINAL)
     Q_PROPERTY(QString localDomainName READ localDomainName CONSTANT FINAL)
+    Q_PROPERTY(QString internetAddress READ internetAddress NOTIFY internetAddressChanged FINAL)
+    Q_PROPERTY(QString localAddress READ localAddress NOTIFY localAddressChanged FINAL)
 
 public:
     enum class AddressType { IPv4, IPv6 };
@@ -36,14 +42,23 @@ public:
     [[nodiscard]] bool isMetered() const;
     [[nodiscard]] QString localHostName() const;
     [[nodiscard]] QString localDomainName() const;
+    [[nodiscard]] QString internetAddress() const;
+    [[nodiscard]] QString localAddress() const;
 
-    [[nodiscard]] Q_INVOKABLE QString getLocalIPAddress(const AddressType type) const;
-    [[nodiscard]] Q_INVOKABLE QString getInternetIPAddress(const AddressType type) const;
+private:
+    void tryFetchInternetAddress();
 
 Q_SIGNALS:
     void networkStatusChanged();
     void transportMediumChanged();
     void behindCaptivePortalChanged();
     void meteredChanged();
+    void internetAddressChanged();
+    void localAddressChanged();
+
+private:
+    QScopedPointer<QNetworkAccessManager> m_networkManager;
+    QString m_internetAddressIPv4 = {};
+    QString m_internetAddressIPv6 = {};
 };
 

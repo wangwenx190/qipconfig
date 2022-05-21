@@ -64,7 +64,8 @@ FRAMELESSHELPER_USE_NAMESPACE
         return defaultLanguage;
     }
     if (isInsensitiveEqual(input, u"zh-hans-cn"_qs) || isInsensitiveEqual(input, u"zh-hans"_qs)
-        || isInsensitiveEqual(input, u"zh-cn"_qs) || isInsensitiveEqual(input, u"zh"_qs)) {
+        || isInsensitiveEqual(input, u"zh-cn"_qs) || isInsensitiveEqual(input, u"zh"_qs)
+        || isInsensitiveEqual(input, u"cn"_qs)) {
         return TranslationManager::Language::zh_Hans;
     }
     return defaultLanguage;
@@ -185,7 +186,7 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty(u"networkAdapterModel"_qs, &model);
 
-    const QUrl mainUrl(u"qrc:///QIPConfig/MainWindow.qml"_qs);
+    const QUrl mainUrl(u"qrc:///QIPConfig/qml/MainWindow.qml"_qs);
 
     const QMetaObject::Connection connection = QObject::connect(
         &engine,

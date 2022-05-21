@@ -118,7 +118,7 @@ FramelessWindow {
                         bold: true
                     }
                     color: Theme.labelColor
-                    text: NetworkInformation.getInternetIPAddress(NetworkInformation.IPv4)
+                    text: NetworkInformation.internetAddress
                 }
             }
 
@@ -143,7 +143,7 @@ FramelessWindow {
                         bold: true
                     }
                     color: Theme.labelColor
-                    text: NetworkInformation.getLocalIPAddress(NetworkInformation.IPv4)
+                    text: NetworkInformation.localAddress
                 }
             }
 

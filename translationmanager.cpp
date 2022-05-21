@@ -68,13 +68,11 @@ void TranslationManager::setLanguage(const Language lang)
     if (m_language == lang) {
         return;
     }
-    QTranslator * const translator = g_availableTranslators[static_cast<int>(lang)].translator;
-    if (!translator) {
-        return;
-    }
     m_language = lang;
     uninstallAllTranslators();
-    qApp->installTranslator(translator);
+    if (QTranslator * const translator = g_availableTranslators[static_cast<int>(lang)].translator) {
+        qApp->installTranslator(translator);
+    }
     if (m_engine) {
         m_engine->retranslate();
     }
@@ -84,9 +82,8 @@ void TranslationManager::setLanguage(const Language lang)
 void TranslationManager::uninstallAllTranslators()
 {
     for (int i = g_translatorOffset; i != g_translatorCount; ++i) {
-        if (!g_availableTranslators[i].translator) {
-            continue;
+        if (g_availableTranslators[i].translator) {
+            qApp->removeTranslator(g_availableTranslators[i].translator);
         }
-        qApp->removeTranslator(g_availableTranslators[i].translator);
     }
 }
