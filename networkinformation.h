@@ -60,5 +60,6 @@ private:
     QScopedPointer<QNetworkAccessManager> m_networkManager;
     QString m_internetAddressIPv4 = {};
     QString m_internetAddressIPv6 = {};
+    int m_retryTimes = 0;
 };
 

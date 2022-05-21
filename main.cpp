@@ -26,7 +26,6 @@
 #include <QtCore/qloggingcategory.h>
 #include <QtCore/qcommandlineparser.h>
 #include <QtNetwork/qnetworkproxy.h>
-#include <QtGui/qguiapplication.h>
 #include <QtQml/qqmlapplicationengine.h>
 #include <QtQml/qqmlcontext.h>
 #include <QtQuick/qsgrendererinterface.h>
@@ -34,9 +33,13 @@
 #include <QtQuickControls2/qquickstyle.h>
 #include <framelessquickmodule.h>
 #include <qtacrylicmaterialplugin.h>
+#include <singleapplication.h>
 #include "translationmanager.h"
 #include "themehelper.h"
 #include "networkadaptermodel.h"
+#ifdef Q_OS_WINDOWS
+#  include <QtCore/qt_windows.h>
+#endif
 
 FRAMELESSHELPER_USE_NAMESPACE
 
@@ -134,7 +137,23 @@ int main(int argc, char *argv[])
 
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::Round);
 
-    QGuiApplication application(argc, argv);
+    SingleApplication application(argc, argv, true, (SingleApplication::User | SingleApplication::SecondaryNotification));
+
+    if (application.isSecondary()) {
+#ifdef Q_OS_WINDOWS
+        AllowSetForegroundWindow(static_cast<DWORD>(application.primaryPid()));
+#endif
+        QStringList arguments = application.arguments();
+        arguments.takeFirst();
+        if (!arguments.isEmpty()) {
+            const QString params = arguments.join(u' ');
+            if (!application.sendMessage(params.toUtf8())) {
+                qWarning() << "Failed to send message to the primary instance.";
+                return -1;
+            }
+        }
+        return 0;
+    }
 
     QCommandLineParser commandLine;
     commandLine.setApplicationDescription(QCoreApplication::translate("main", "A convenient tool to show your network configuration."));
@@ -204,6 +223,22 @@ int main(int argc, char *argv[])
         }, Qt::QueuedConnection);
 
     engine.load(mainUrl);
+
+    const QObjectList rootObjects = engine.rootObjects();
+    Q_ASSERT(!rootObjects.isEmpty());
+    if (rootObjects.isEmpty()) {
+        qWarning() << "The QML engine does not create any objects.";
+        return -1;
+    }
+    const auto mainWindow = qobject_cast<QQuickWindow *>(rootObjects.at(0));
+    Q_ASSERT(mainWindow);
+    if (!mainWindow) {
+        qWarning() << "The main window is not created.";
+        return -1;
+    }
+    QObject::connect(&application, &SingleApplication::instanceStarted, QCoreApplication::instance(), [mainWindow](){
+        QMetaObject::invokeMethod(mainWindow, "bringWindowToFront");
+    });
 
     TranslationManager::instance()->setLanguage(getPreferredLanguage(commandLine.value(languageOption)));
 

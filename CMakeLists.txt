@@ -75,14 +75,20 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+set(BUILD_SHARED_LIBS OFF)
+
+# FramelessHelper
 set(FRAMELESSHELPER_BUILD_STATIC ON)
 set(FRAMELESSHELPER_BUILD_WIDGETS OFF)
 set(FRAMELESSHELPER_BUILD_EXAMPLES OFF)
 
+# QtAcrylicMaterial
 set(QTACRYLICMATERIAL_BUILD_DEMO OFF)
 set(QTACRYLICMATERIAL_BUILD_STATIC ON)
 
-set(imports_dir ${PROJECT_BINARY_DIR}/imports)
+# SingleApplication
+set(QAPPLICATION_CLASS QGuiApplication)
+
 set(translations_dir ${CMAKE_CURRENT_SOURCE_DIR}/translations)
 
 find_package(Qt6 REQUIRED COMPONENTS
@@ -125,7 +131,6 @@ qt_add_qml_module(${PROJECT_NAME}
     DEPENDENCIES
         org.wangwenx190.FramelessHelper
         org.wangwenx190.QtAcrylicMaterial
-    #IMPORT_PATH ${imports_dir}
     QML_FILES ${QML_SOURCES}
 )
 
@@ -165,6 +170,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt::Quick Qt::QuickControls2
     FramelessHelperCore FramelessHelperQuick
     QtAcrylicMaterial
+    SingleApplication::SingleApplication
 )
 
 if(MSVC)

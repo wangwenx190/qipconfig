@@ -117,14 +117,13 @@ QVariant NetworkAdapterModel::headerData(const int section, const Qt::Orientatio
 void NetworkAdapterModel::populate()
 {
     beginResetModel();
-    m_adapters.clear();
+    if (!m_adapters.isEmpty()) {
+        m_adapters.clear();
+    }
     const QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
     if (!interfaces.isEmpty()) {
         for (auto &&interface : qAsConst(interfaces)) {
-            if (!interface.isValid()) {
-                continue;
-            }
-            if (interface.type() == QNetworkInterface::Loopback) {
+            if (!interface.isValid() || (interface.type() == QNetworkInterface::Loopback)) {
                 continue;
             }
             NetworkAdapter adapter = {};
@@ -134,10 +133,7 @@ void NetworkAdapterModel::populate()
             if (!entries.isEmpty()) {
                 for (auto &&entry : qAsConst(entries)) {
                     const QHostAddress ip = entry.ip();
-                    if (ip.isNull()) {
-                        continue;
-                    }
-                    if (ip.isLoopback()) {
+                    if (ip.isNull() || ip.isLoopback()) {
                         continue;
                     }
                     if (adapter.IPv4Address.isEmpty() && (ip.protocol() == QAbstractSocket::IPv4Protocol)) {

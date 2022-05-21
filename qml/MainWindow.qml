@@ -38,6 +38,10 @@ FramelessWindow {
     title: Application.displayName
     onClosing: Utils.saveGeometry(window)
 
+    function bringWindowToFront() {
+        FramelessHelper.bringWindowToFront();
+    }
+
     FramelessHelper.onReady: {
         FramelessHelper.titleBarItem = titleBar;
         FramelessHelper.setSystemButton(titleBar.minimizeButton, FramelessHelperConstants.Minimize);

@@ -7,6 +7,8 @@
 #include <QtNetwork/qnetworkreply.h>
 #include <QtNetwork/qnetworkinformation.h>
 
+static constexpr const int MAX_RETRY_TIMES = 10;
+
 NetworkInformation::NetworkInformation(QObject *parent) : QObject(parent)
 {
     qRegisterMetaType<AddressType>();
@@ -24,29 +26,35 @@ NetworkInformation::NetworkInformation(QObject *parent) : QObject(parent)
         if (!reply) {
             return;
         }
+        if (m_retryTimes >= MAX_RETRY_TIMES) {
+            m_retryTimes = 0;
+            qWarning() << "Reached the limitation of the maximum retry times.";
+            return;
+        }
+        ++m_retryTimes;
         QJsonParseError jsonErr = {};
         const QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll(), &jsonErr);
         if (jsonErr.error != QJsonParseError::NoError) {
             qWarning() << jsonErr.errorString();
             return;
         }
-        if (jsonDoc.isNull() || jsonDoc.isEmpty() || !jsonDoc.isObject()) {
+        if (!jsonDoc.isObject()) {
             qWarning() << "The JSON document is not valid.";
             return;
         }
         const QJsonObject jsonObj = jsonDoc.object();
-        if (jsonObj.isEmpty() || !jsonObj.contains(u"ip"_qs)) {
-            qWarning() << "The JSON object does not contain the IP information.";
+        if (!jsonObj.contains(u"ip"_qs)) {
+            qWarning() << "The JSON object does not contain the expected data.";
             return;
         }
         const QJsonValue jsonVal = jsonObj.value(u"ip"_qs);
-        if (jsonVal.isNull() || jsonVal.isUndefined() || !jsonVal.isString()) {
-            qWarning() << "The JSON value is not expected.";
+        if (!jsonVal.isString()) {
+            qWarning() << "The JSON value is not valid.";
             return;
         }
         const QString ip = jsonVal.toString();
         if (ip.isEmpty()) {
-            qWarning() << "The received IP information is empty.";
+            qWarning() << "The received string is empty.";
             return;
         }
         const QHostAddress address(ip);
@@ -57,13 +65,18 @@ NetworkInformation::NetworkInformation(QObject *parent) : QObject(parent)
         if (address.protocol() == QAbstractSocket::IPv4Protocol) {
             m_internetAddressIPv4 = address.toString();
             Q_EMIT internetAddressChanged();
+            m_retryTimes = 0;
+            return;
         }
 #if 0
         else if (address.protocol() == QAbstractSocket::IPv6Protocol) {
             m_internetAddressIPv6 = QHostAddress(address.toIPv6Address()).toString();
             Q_EMIT internetAddressChanged();
+            m_retryTimes = 0;
+            return;
         }
 #endif
+        tryFetchInternetAddress();
     });
     if (QNetworkInformation::loadDefaultBackend()) {
         if (const QNetworkInformation * const ni = QNetworkInformation::instance()) {
@@ -77,6 +90,7 @@ NetworkInformation::NetworkInformation(QObject *parent) : QObject(parent)
     } else {
         qWarning() << "Failed to load the default QNetworkInformation backend.";
     }
+    m_retryTimes = 0;
     tryFetchInternetAddress();
 }
 
