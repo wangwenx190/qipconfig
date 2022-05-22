@@ -160,7 +160,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     QT_NO_CAST_TO_ASCII
     QT_NO_URL_CAST_FROM_STRING
     QT_NO_CAST_FROM_BYTEARRAY
-    QT_NO_KEYWORDS
+    #QT_NO_KEYWORDS
     QT_NO_NARROWING_CONVERSIONS_IN_CONNECT
     QT_NO_FOREACH
     QT_USE_QSTRINGBUILDER
@@ -179,7 +179,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 if(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE
-        /utf-8 /W4 /WX
+        /utf-8 /W3 /WX
     )
 else()
     target_compile_options(${PROJECT_NAME} PRIVATE
