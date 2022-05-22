@@ -45,40 +45,23 @@ static const QString kStateKey = u"Window/State"_qs;
     return uri;
 }
 
-[[nodiscard]] static inline QByteArray encrypt(const QString &str)
-{
-    Q_ASSERT(!str.isEmpty());
-    if (str.isEmpty()) {
-        return {};
-    }
-    const QByteArray ba = str.toUtf8();
-    return ba.toBase64(kEncryptOptions);
-}
-
-[[nodiscard]] static inline QString decrypt(const QByteArray &ba)
-{
-    Q_ASSERT(!ba.isEmpty());
-    if (ba.isEmpty()) {
-        return {};
-    }
-    const QByteArray::FromBase64Result result = QByteArray::fromBase64Encoding(ba, kEncryptOptions);
-    if (!result) {
-        qWarning() << "Failed to decrypt Base64 data.";
-        return {};
-    }
-    return QString::fromUtf8(*result);
-}
-
 [[nodiscard]] static inline QByteArray encode(const QVariant &var)
 {
     Q_ASSERT(var.isValid());
     if (!var.isValid()) {
         return {};
     }
+    const QByteArray encryptedData = [&var]() -> QByteArray {
+        QByteArray data = {};
+        QDataStream stream(&data, QDataStream::WriteOnly);
+        stream.setVersion(kFormatVersion);
+        stream << kUniqueIdentifier << applicationUri() << var;
+        return data.toBase64(kEncryptOptions);
+    }();
     QByteArray result = {};
     QDataStream stream(&result, QDataStream::WriteOnly);
     stream.setVersion(kFormatVersion);
-    stream << kUniqueIdentifier << encrypt(applicationUri()) << var;
+    stream << encryptedData;
     return result;
 }
 
@@ -88,7 +71,27 @@ static const QString kStateKey = u"Window/State"_qs;
     if (ba.isEmpty()) {
         return {};
     }
-    QDataStream stream(ba);
+    const QByteArray decryptedData = [&ba]() -> QByteArray {
+        QByteArray data = {};
+        QDataStream stream(ba);
+        stream.setVersion(kFormatVersion);
+        stream >> data;
+        if (data.isEmpty()) {
+            qWarning() << "Failed to parse the binary data.";
+            return {};
+        }
+        const QByteArray::FromBase64Result result = QByteArray::fromBase64Encoding(data, kEncryptOptions);
+        if (result.decodingStatus != QByteArray::Base64DecodingStatus::Ok) {
+            qWarning() << "Failed to decode the Base64 encoding data.";
+            return {};
+        }
+        return result.decoded;
+    }();
+    if (decryptedData.isEmpty()) {
+        qWarning() << "Failed to decrypt the settings data.";
+        return {};
+    }
+    QDataStream stream(decryptedData);
     stream.setVersion(kFormatVersion);
     quint32 identifier = 0;
     stream >> identifier;
@@ -96,9 +99,9 @@ static const QString kStateKey = u"Window/State"_qs;
         qWarning() << "Settings: data format not valid.";
         return {};
     }
-    QByteArray uri = {};
+    QString uri = {};
     stream >> uri;
-    if (decrypt(uri) != applicationUri()) {
+    if (uri != applicationUri()) {
         qWarning() << "Settings: product URI does not match.";
         return {};
     }

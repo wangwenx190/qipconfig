@@ -140,6 +140,7 @@ int main(int argc, char *argv[])
     SingleApplication application(argc, argv, true, (SingleApplication::User | SingleApplication::SecondaryNotification));
 
     if (application.isSecondary()) {
+        qDebug() << "Detected primary instance exists, exiting now ...";
 #ifdef Q_OS_WINDOWS
         AllowSetForegroundWindow(static_cast<DWORD>(application.primaryPid()));
 #endif
@@ -154,6 +155,10 @@ int main(int argc, char *argv[])
         }
         return 0;
     }
+    QObject::connect(&application, &SingleApplication::receivedMessage, QCoreApplication::instance(), [](const quint32 instanceId, const QByteArray &message){
+        const QStringList arguments = QString::fromUtf8(message).split(u' ', Qt::SkipEmptyParts);
+        qDebug() << "Message received from secondary instance" << instanceId << ':' << arguments;
+    });
 
     QCommandLineParser commandLine;
     commandLine.setApplicationDescription(QCoreApplication::translate("main", "A convenient tool to show your network configuration."));
@@ -237,6 +242,7 @@ int main(int argc, char *argv[])
         return -1;
     }
     QObject::connect(&application, &SingleApplication::instanceStarted, QCoreApplication::instance(), [mainWindow](){
+        qDebug() << "Woken up by secondary instances.";
         QMetaObject::invokeMethod(mainWindow, "bringWindowToFront");
     });
 
