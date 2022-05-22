@@ -133,32 +133,32 @@
 <context>
     <name>NetworkAdapterModel</name>
     <message>
-        <location filename="../networkadaptermodel.cpp" line="101"/>
+        <location filename="../networkadaptermodel.cpp" line="125"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../networkadaptermodel.cpp" line="103"/>
+        <location filename="../networkadaptermodel.cpp" line="127"/>
         <source>Hardware Address</source>
         <translation>硬件地址</translation>
     </message>
     <message>
-        <location filename="../networkadaptermodel.cpp" line="105"/>
+        <location filename="../networkadaptermodel.cpp" line="129"/>
         <source>IPv4 Address</source>
         <translation>IPv4地址</translation>
     </message>
     <message>
-        <location filename="../networkadaptermodel.cpp" line="107"/>
+        <location filename="../networkadaptermodel.cpp" line="131"/>
         <source>IPv6 Address</source>
         <translation>IPv6地址</translation>
     </message>
     <message>
-        <location filename="../networkadaptermodel.cpp" line="109"/>
+        <location filename="../networkadaptermodel.cpp" line="133"/>
         <source>Netmask</source>
         <translation>子网掩码</translation>
     </message>
     <message>
-        <location filename="../networkadaptermodel.cpp" line="111"/>
+        <location filename="../networkadaptermodel.cpp" line="135"/>
         <source>Broadcast Address</source>
         <translation>广播地址</translation>
     </message>
@@ -166,15 +166,15 @@
 <context>
     <name>NetworkInformation</name>
     <message>
-        <location filename="../networkinformation.cpp" line="161"/>
-        <location filename="../networkinformation.cpp" line="174"/>
-        <location filename="../networkinformation.cpp" line="178"/>
-        <location filename="../networkinformation.cpp" line="193"/>
+        <location filename="../networkinformation.cpp" line="185"/>
+        <location filename="../networkinformation.cpp" line="198"/>
+        <location filename="../networkinformation.cpp" line="202"/>
+        <location filename="../networkinformation.cpp" line="217"/>
         <source>NOT AVAILABLE</source>
         <translation>不可用</translation>
     </message>
     <message>
-        <location filename="../networkinformation.cpp" line="164"/>
+        <location filename="../networkinformation.cpp" line="188"/>
         <source>WAITING</source>
         <translation>等待</translation>
     </message>
@@ -182,7 +182,7 @@
 <context>
     <name>RefreshButton</name>
     <message>
-        <location filename="../qml/RefreshButton.qml" line="27"/>
+        <location filename="../qml/RefreshButton.qml" line="51"/>
         <source>Click to re-detect the network configuration.</source>
         <translation>点击以重新检测网络配置。</translation>
     </message>
@@ -190,42 +190,42 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="159"/>
+        <location filename="../main.cpp" line="164"/>
         <source>A convenient tool to show your network configuration.</source>
         <translation>一个用来显示您的网络配置的便捷工具。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="164"/>
+        <location filename="../main.cpp" line="169"/>
         <source>Set the application theme to &lt;theme&gt;. Available values: light, dark, system.</source>
         <translation>将应用程序主题设置为&lt;主题&gt;。可用的值为：light、dark、system。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="165"/>
+        <location filename="../main.cpp" line="170"/>
         <source>theme</source>
         <translation>主题</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="169"/>
+        <location filename="../main.cpp" line="174"/>
         <source>Set the application language to &lt;language&gt;. Available values: zh-hans, en-us, auto.</source>
         <translation>将应用程序语言设置为&lt;语言&gt;。可用的值为：zh-hans、en-us、auto。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="170"/>
+        <location filename="../main.cpp" line="175"/>
         <source>language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="174"/>
+        <location filename="../main.cpp" line="179"/>
         <source>Set the renderer&apos;s 3D graphics API to &lt;API&gt;. Available values: d3d11, vulkan, metal, opengl, software, auto.</source>
         <translation>将渲染引擎的三维图形接口设置为&lt;接口&gt;。可用的值为：d3d11、vulkan、metal、opengl、software、auto。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="179"/>
+        <location filename="../main.cpp" line="184"/>
         <source>Use the system network proxy configuration.</source>
         <translation>使用系统网络代理设置。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="175"/>
+        <location filename="../main.cpp" line="180"/>
         <source>API</source>
         <translation>接口</translation>
     </message>
