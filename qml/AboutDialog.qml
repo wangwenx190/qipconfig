@@ -43,36 +43,82 @@ AcrylicWindow {
     }
 
     ColumnLayout {
-        anchors.fill: parent
-        anchors.margins: Theme.contentsMargin
-        spacing: 5
+        anchors {
+            top: titleBar.bottom
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+            margins: Theme.contentsMargin
+        }
+        spacing: Theme.contentsMargin
 
         Label {
+            font {
+                bold: true
+                pointSize: Theme.contentFontSize
+            }
             text: qsTr("Qt version (run-time): %1").arg(DeveloperInformation.qtRunTimeVersion)
         }
 
         Label {
+            font {
+                bold: true
+                pointSize: Theme.contentFontSize
+            }
             text: qsTr("Qt version (compile-time): %1").arg(DeveloperInformation.qtCompileTimeVersion)
         }
 
         Label {
+            font {
+                bold: true
+                pointSize: Theme.contentFontSize
+            }
             text: qsTr("Qt ABI: %1").arg(DeveloperInformation.qtAbiInfo)
         }
 
         Label {
+            font {
+                bold: true
+                pointSize: Theme.contentFontSize
+            }
+            text: qsTr("Qt Quick graphics API: %1").arg(DeveloperInformation.graphicsApi)
+        }
+
+        Label {
+            font {
+                bold: true
+                pointSize: Theme.contentFontSize
+            }
             text: qsTr("Compiler: %1").arg(DeveloperInformation.compilerInfo)
         }
 
         Label {
+            font {
+                bold: true
+                pointSize: Theme.contentFontSize
+            }
+            text: qsTr("Compile date and time: %1").arg(DeveloperInformation.compileDateTime)
+        }
+
+        Label {
+            font {
+                bold: true
+                pointSize: Theme.contentFontSize
+            }
             text: qsTr("Operating system: %1").arg(DeveloperInformation.systemInfo)
         }
 
         Label {
+            font {
+                bold: true
+                pointSize: Theme.contentFontSize
+            }
             text: qsTr("CPU architecture: %1").arg(DeveloperInformation.cpuArchitecture)
         }
 
-        Label {
-            text: qsTr("Compile date and time: %1").arg(DeveloperInformation.compileDateTime)
+        Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
         }
     }
 
@@ -85,7 +131,5 @@ AcrylicWindow {
         }
         minimizeButton.visible: false
         maximizeButton.visible: false
-        useAlternativeBackground: true
-        color: window.color
     }
 }

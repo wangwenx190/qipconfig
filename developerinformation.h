@@ -41,6 +41,8 @@ class DeveloperInformation : public QObject
     Q_PROPERTY(QString systemInfo READ systemInfo CONSTANT FINAL)
     Q_PROPERTY(QString cpuArchitecture READ cpuArchitecture CONSTANT FINAL)
     Q_PROPERTY(QString compileDateTime READ compileDateTime CONSTANT FINAL)
+    Q_PROPERTY(QString graphicsApi READ graphicsApi CONSTANT FINAL)
+    Q_PROPERTY(QString qtBuildInfo READ qtBuildInfo CONSTANT FINAL)
 
 public:
     explicit DeveloperInformation(QObject *parent = nullptr);
@@ -53,4 +55,6 @@ public:
     [[nodiscard]] QString systemInfo() const;
     [[nodiscard]] QString cpuArchitecture() const;
     [[nodiscard]] QString compileDateTime() const;
+    [[nodiscard]] QString graphicsApi() const;
+    [[nodiscard]] QString qtBuildInfo() const;
 };

@@ -9,37 +9,42 @@
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="51"/>
+        <location filename="../qml/AboutDialog.qml" line="60"/>
         <source>Qt version (run-time): %1</source>
         <translation>Qt版本（运行时）：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="55"/>
+        <location filename="../qml/AboutDialog.qml" line="68"/>
         <source>Qt version (compile-time): %1</source>
         <translation>Qt版本（编译时）：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="59"/>
+        <location filename="../qml/AboutDialog.qml" line="76"/>
         <source>Qt ABI: %1</source>
         <translation>Qt应用程序二进制接口：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="63"/>
+        <location filename="../qml/AboutDialog.qml" line="84"/>
+        <source>Qt Quick graphics API: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/AboutDialog.qml" line="92"/>
         <source>Compiler: %1</source>
         <translation>编译器：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="67"/>
+        <location filename="../qml/AboutDialog.qml" line="108"/>
         <source>Operating system: %1</source>
         <translation>操作系统：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="71"/>
+        <location filename="../qml/AboutDialog.qml" line="116"/>
         <source>CPU architecture: %1</source>
         <translation>中央处理器架构：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="75"/>
+        <location filename="../qml/AboutDialog.qml" line="100"/>
         <source>Compile date and time: %1</source>
         <translation>编译日期及时间：%1</translation>
     </message>
@@ -55,6 +60,14 @@
         <location filename="../qml/ClickableLabel.qml" line="63"/>
         <source>&quot;%1&quot; has been copied to the clipboard!</source>
         <translation>“%1”已经被复制到剪贴板！</translation>
+    </message>
+</context>
+<context>
+    <name>DeveloperInformation</name>
+    <message>
+        <location filename="../developerinformation.cpp" line="119"/>
+        <source>UNKNOWN</source>
+        <translation type="unfinished">未知</translation>
     </message>
 </context>
 <context>

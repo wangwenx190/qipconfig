@@ -23,7 +23,9 @@
  */
 
 #include "developerinformation.h"
+#include <QtCore/qlibraryinfo.h>
 #include <QtCore/qsysinfo.h>
+#include <QtQuick/qquickwindow.h>
 
 #ifndef COMPILER_STRING
 #  ifdef Q_CC_CLANG // Must be before GNU, because Clang claims to be GNU too.
@@ -94,5 +96,33 @@ QString DeveloperInformation::cpuArchitecture() const
 QString DeveloperInformation::compileDateTime() const
 {
     static const QString result = QString::fromUtf8(__DATE__ " " __TIME__);
+    return result;
+}
+
+QString DeveloperInformation::graphicsApi() const
+{
+    static const QString result = []() -> QString {
+        switch (QQuickWindow::graphicsApi()) {
+        case QSGRendererInterface::Direct3D11:
+            return u"Direct3D11"_qs;
+        case QSGRendererInterface::Vulkan:
+            return u"Vulkan"_qs;
+        case QSGRendererInterface::Metal:
+            return u"Metal"_qs;
+        case QSGRendererInterface::OpenGL:
+            return u"OpenGL"_qs;
+        case QSGRendererInterface::Software:
+            return u"Software"_qs;
+        default:
+            break;
+        }
+        return tr("UNKNOWN");
+    }();
+    return result;
+}
+
+QString DeveloperInformation::qtBuildInfo() const
+{
+    static const QString result = QString::fromUtf8(QLibraryInfo::build());
     return result;
 }

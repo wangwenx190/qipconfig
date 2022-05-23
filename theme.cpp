@@ -132,7 +132,7 @@ qreal Theme::contentsMargin() const
 
 QSizeF Theme::aboutDialogSize() const
 {
-    return {600, 480};
+    return {550, 290};
 }
 
 bool Theme::eventFilter(QObject *object, QEvent *event)
