@@ -129,6 +129,7 @@ AcrylicWindow {
             left: parent.left
             right: parent.right
         }
+        hideWhenClose: true
         minimizeButton.visible: false
         maximizeButton.visible: false
     }
