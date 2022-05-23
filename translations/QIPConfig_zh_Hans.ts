@@ -26,7 +26,7 @@
     <message>
         <location filename="../qml/AboutDialog.qml" line="84"/>
         <source>Qt Quick graphics API: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Qt Quick图形应用程序编程接口：%1</translation>
     </message>
     <message>
         <location filename="../qml/AboutDialog.qml" line="92"/>
@@ -67,7 +67,7 @@
     <message>
         <location filename="../developerinformation.cpp" line="119"/>
         <source>UNKNOWN</source>
-        <translation type="unfinished">未知</translation>
+        <translation>未知</translation>
     </message>
 </context>
 <context>
