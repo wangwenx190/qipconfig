@@ -55,32 +55,44 @@ DeveloperInformation::DeveloperInformation(QObject *parent) : QObject(parent)
 
 DeveloperInformation::~DeveloperInformation() = default;
 
-QString DeveloperInformation::qtRuntimeVersion() const
+QString DeveloperInformation::qtRunTimeVersion() const
 {
-    return QString::fromUtf8(qVersion());
+    static const QString result = QString::fromUtf8(qVersion());
+    return result;
 }
 
-QString DeveloperInformation::qtCompiletimeVersion() const
+QString DeveloperInformation::qtCompileTimeVersion() const
 {
-    return QString::fromUtf8(QT_VERSION_STR);
+    static const QString result = QString::fromUtf8(QT_VERSION_STR);
+    return result;
 }
 
 QString DeveloperInformation::qtAbiInfo() const
 {
-    return QSysInfo::buildAbi();
+    static const QString result = QSysInfo::buildAbi();
+    return result;
 }
 
 QString DeveloperInformation::compilerInfo() const
 {
-    return QString::fromUtf8(COMPILER_STRING);
+    static const QString result = QString::fromUtf8(COMPILER_STRING);
+    return result;
 }
 
 QString DeveloperInformation::systemInfo() const
 {
-    return (u"%1 (%2 %3)"_qs).arg(QSysInfo::prettyProductName(), QSysInfo::kernelType(), QSysInfo::kernelVersion());
+    static const QString result = (u"%1 (%2 %3)"_qs).arg(QSysInfo::prettyProductName(), QSysInfo::kernelType(), QSysInfo::kernelVersion());
+    return result;
 }
 
 QString DeveloperInformation::cpuArchitecture() const
 {
-    return QSysInfo::currentCpuArchitecture();
+    static const QString result = QSysInfo::currentCpuArchitecture();
+    return result;
+}
+
+QString DeveloperInformation::compileDateTime() const
+{
+    static const QString result = QString::fromUtf8(__DATE__ " " __TIME__);
+    return result;
 }

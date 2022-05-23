@@ -45,7 +45,7 @@ class NetworkInformation : public QObject
     Q_PROPERTY(QString localHostName READ localHostName CONSTANT FINAL)
     Q_PROPERTY(QString localDomainName READ localDomainName CONSTANT FINAL)
     Q_PROPERTY(QString internetAddress READ internetAddress NOTIFY internetAddressChanged FINAL)
-    Q_PROPERTY(QString localAddress READ localAddress NOTIFY localAddressChanged FINAL)
+    Q_PROPERTY(QString localAddress READ localAddress CONSTANT FINAL)
 
 public:
     enum class AddressType { IPv4, IPv6 };
@@ -78,7 +78,6 @@ Q_SIGNALS:
     void behindCaptivePortalChanged();
     void meteredChanged();
     void internetAddressChanged();
-    void localAddressChanged();
 
 private:
     QScopedPointer<QNetworkAccessManager> m_networkManager;

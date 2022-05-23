@@ -142,22 +142,25 @@ int main(int argc, char *argv[])
     if (application.isSecondary()) {
         qDebug() << "Detected primary instance exists, exiting now ...";
 #ifdef Q_OS_WINDOWS
-        AllowSetForegroundWindow(static_cast<DWORD>(application.primaryPid()));
+        if (AllowSetForegroundWindow(static_cast<DWORD>(application.primaryPid())) == FALSE) {
+            qWarning() << "AllowSetForegroundWindow() failed with error code" << GetLastError();
+        }
 #endif
         QStringList arguments = application.arguments();
         arguments.takeFirst();
         if (!arguments.isEmpty()) {
             const QString params = arguments.join(u' ');
-            if (!application.sendMessage(params.toUtf8())) {
-                qWarning() << "Failed to send message to the primary instance.";
+            if (application.sendMessage(params.toUtf8())) {
+                qDebug() << "Message" << params << "has been sent to the primary instance.";
+            } else {
+                qWarning() << "Failed to send message" << params << "to the primary instance.";
                 return -1;
             }
         }
         return 0;
     }
     QObject::connect(&application, &SingleApplication::receivedMessage, QCoreApplication::instance(), [](const quint32 instanceId, const QByteArray &message){
-        const QStringList arguments = QString::fromUtf8(message).split(u' ', Qt::SkipEmptyParts);
-        qDebug() << "Message received from secondary instance" << instanceId << ':' << arguments;
+        qDebug() << "Message received from secondary instance" << instanceId << ':' << QString::fromUtf8(message);
     });
 
     QCommandLineParser commandLine;
@@ -210,7 +213,7 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty(u"networkAdapterModel"_qs, &model);
 
-    const QUrl mainUrl(u"qrc:///QIPConfig/qml/MainWindow.qml"_qs);
+    const QUrl mainUrl(u"qrc:///QIPConfig/qml/main.qml"_qs);
 
     const QMetaObject::Connection connection = QObject::connect(
         &engine,
@@ -232,18 +235,12 @@ int main(int argc, char *argv[])
     const QObjectList rootObjects = engine.rootObjects();
     Q_ASSERT(!rootObjects.isEmpty());
     if (rootObjects.isEmpty()) {
-        qWarning() << "The QML engine does not create any objects.";
+        qWarning() << "The QML engine does not create any elements.";
         return -1;
     }
-    const auto mainWindow = qobject_cast<QQuickWindow *>(rootObjects.at(0));
-    Q_ASSERT(mainWindow);
-    if (!mainWindow) {
-        qWarning() << "The main window is not created.";
-        return -1;
-    }
-    QObject::connect(&application, &SingleApplication::instanceStarted, QCoreApplication::instance(), [mainWindow](){
-        qDebug() << "Woken up by secondary instances.";
-        QMetaObject::invokeMethod(mainWindow, "bringWindowToFront");
+    QObject::connect(&application, &SingleApplication::instanceStarted, QCoreApplication::instance(), [&rootObjects](){
+        qDebug() << "Woken up by secondary instance.";
+        QMetaObject::invokeMethod(rootObjects.constFirst(), "raiseMainWindow");
     });
 
     TranslationManager::instance()->setLanguage(getPreferredLanguage(commandLine.value(languageOption)));

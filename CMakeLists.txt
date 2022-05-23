@@ -126,6 +126,10 @@ set(QML_SOURCES
     qml/RefreshButton.qml
     qml/ClickableLabel.qml
     qml/MainWindow.qml
+    qml/InformationButton.qml
+    qml/AboutDialog.qml
+    qml/AcrylicWindow.qml
+    qml/main.qml
 )
 
 qt_add_qml_module(${PROJECT_NAME}
@@ -172,8 +176,8 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt::CorePrivate Qt::Network Qt::GuiPrivate
     Qt::Quick Qt::QuickControls2
-    FramelessHelperCore FramelessHelperQuick
-    QtAcrylicMaterial
+    FramelessHelper::Core FramelessHelper::Quick
+    QtAcrylicMaterial::QtAcrylicMaterial
     SingleApplication::SingleApplication
 )
 
@@ -181,6 +185,15 @@ if(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE
         /utf-8 /W3 /WX
     )
+    target_link_options(${PROJECT_NAME} PRIVATE /WX)
+    if(NOT (CMAKE_BUILD_TYPE STREQUAL "Debug"))
+        target_compile_options(${PROJECT_NAME} PRIVATE
+            /Zc:inline /Gy /Gw
+        )
+        target_link_options(${PROJECT_NAME} PRIVATE
+            /OPT:REF /OPT:ICF
+        )
+    endif()
 else()
     target_compile_options(${PROJECT_NAME} PRIVATE
         -Wall -Wextra -Werror

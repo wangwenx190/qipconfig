@@ -26,17 +26,17 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import org.wangwenx190.FramelessHelper
-import org.wangwenx190.QtAcrylicMaterial
 import QIPConfig
 
-FramelessWindow {
+AcrylicWindow {
     id: window
     width: Theme.windowSize.width
     height: Theme.windowSize.height
     visible: false
-    color: Theme.windowColor
     title: Application.displayName
     onClosing: Utils.saveGeometry(window)
+
+    signal showAboutDialog()
 
     function bringWindowToFront() {
         FramelessHelper.bringWindowToFront();
@@ -51,38 +51,6 @@ FramelessWindow {
             FramelessHelper.moveWindowToDesktopCenter();
         }
         window.visible = true;
-    }
-
-    DesktopWallpaper {
-        id: wallpaper
-        anchors {
-            top: window.topBorderBottom
-            bottom: parent.bottom
-            left: parent.left
-            right: parent.right
-        }
-        visible: false
-    }
-
-    AcrylicMaterial {
-        id: acrylic
-        anchors {
-            top: window.topBorderBottom
-            bottom: parent.bottom
-            left: parent.left
-            right: parent.right
-        }
-        source: wallpaper
-        theme: {
-            switch (Theme.preferredTheme) {
-            case Theme.Light:
-                return AcrylicMaterial.Light;
-            case Theme.Dark:
-                return AcrylicMaterial.Dark;
-            case Theme.System:
-                return AcrylicMaterial.System;
-            }
-        }
     }
 
     Rectangle {
@@ -506,6 +474,10 @@ FramelessWindow {
 
             RefreshButton {
                 onClicked: networkAdapterModel.populate()
+            }
+
+            InformationButton {
+                onClicked: window.showAboutDialog()
             }
         }
     }

@@ -31,7 +31,7 @@
 #include <QtNetwork/qnetworkreply.h>
 #include <QtNetwork/qnetworkinformation.h>
 
-static constexpr const int MAX_RETRY_TIMES = 10;
+static constexpr const int MAX_RETRY_TIMES = 30;
 
 NetworkInformation::NetworkInformation(QObject *parent) : QObject(parent)
 {
@@ -171,12 +171,14 @@ bool NetworkInformation::isMetered() const
 
 QString NetworkInformation::localHostName() const
 {
-    return QHostInfo::localHostName();
+    static const QString result = QHostInfo::localHostName();
+    return result;
 }
 
 QString NetworkInformation::localDomainName() const
 {
-    return QHostInfo::localDomainName();
+    static const QString result = QHostInfo::localDomainName();
+    return result;
 }
 
 QString NetworkInformation::internetAddress() const
@@ -192,29 +194,32 @@ QString NetworkInformation::internetAddress() const
 
 QString NetworkInformation::localAddress() const
 {
-    const QHostInfo info = QHostInfo::fromName(QHostInfo::localHostName());
-    if (info.error() != QHostInfo::NoError) {
-        qWarning() << info.errorString();
-        return tr("NOT AVAILABLE");
-    }
-    const QList<QHostAddress> addresses = info.addresses();
-    if (addresses.isEmpty()) {
-        return tr("NOT AVAILABLE");
-    }
-    for (auto &&address : qAsConst(addresses)) {
-        if (address.isNull() || address.isLoopback()) {
-            continue;
+    static const QString result = []() -> QString {
+        const QHostInfo info = QHostInfo::fromName(QHostInfo::localHostName());
+        if (info.error() != QHostInfo::NoError) {
+            qWarning() << info.errorString();
+            return tr("NOT AVAILABLE");
         }
-        if (address.protocol() == QAbstractSocket::IPv4Protocol) {
-            return address.toString();
+        const QList<QHostAddress> addresses = info.addresses();
+        if (addresses.isEmpty()) {
+            return tr("NOT AVAILABLE");
         }
+        for (auto &&address : qAsConst(addresses)) {
+            if (address.isNull() || address.isLoopback()) {
+                continue;
+            }
+            if (address.protocol() == QAbstractSocket::IPv4Protocol) {
+                return address.toString();
+            }
 #if 0
-        else if (address.protocol() == QAbstractSocket::IPv6Protocol) {
-            return QHostAddress(address.toIPv6Address()).toString();
-        }
+            else if (address.protocol() == QAbstractSocket::IPv6Protocol) {
+                return QHostAddress(address.toIPv6Address()).toString();
+            }
 #endif
-    }
-    return tr("NOT AVAILABLE");
+        }
+        return tr("NOT AVAILABLE");
+    }();
+    return result;
 }
 
 void NetworkInformation::tryFetchInternetAddress()

@@ -39,6 +39,8 @@ Theme::Theme(QObject *parent) : QObject(parent)
     if (preferredTheme() == ThemeType::System) {
 #ifdef Q_OS_WINDOWS
         setupWin32ThemeChangeNotifier();
+#else
+        installEventFilter(this);
 #endif
         connect(themeHelper, &ThemeHelper::systemThemeChanged, this, &Theme::refresh);
     }
@@ -128,6 +130,11 @@ qreal Theme::contentsMargin() const
     return 10;
 }
 
+QSizeF Theme::aboutDialogSize() const
+{
+    return {600, 480};
+}
+
 bool Theme::eventFilter(QObject *object, QEvent *event)
 {
     Q_ASSERT(object);
@@ -137,7 +144,7 @@ bool Theme::eventFilter(QObject *object, QEvent *event)
     }
     switch (event->type()) {
     case QEvent::ThemeChange: {
-        qDebug() << "Detected theme change event.";
+        qDebug() << "Detected system theme change event.";
         Q_EMIT themeChanged();
     } break;
     case QEvent::ApplicationPaletteChange: {
@@ -152,7 +159,7 @@ bool Theme::eventFilter(QObject *object, QEvent *event)
 
 void Theme::refresh()
 {
-    const bool dark = [this]() -> bool {
+    m_dark = [this]() -> bool {
         const ThemeType preferred = preferredTheme();
         if (preferred == ThemeType::System) {
             if (const QPlatformTheme * const theme = QGuiApplicationPrivate::platformTheme()) {
@@ -162,9 +169,5 @@ void Theme::refresh()
         }
         return (preferred == ThemeType::Dark);
     }();
-    if (m_dark == dark) {
-        return;
-    }
-    m_dark = dark;
     Q_EMIT themeChanged();
 }

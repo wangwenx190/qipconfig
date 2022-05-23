@@ -48,8 +48,22 @@ public:
         if (!msg->hwnd) {
             return false;
         }
-        if ((msg->message == WM_SETTINGCHANGE) && (msg->lParam != 0) &&
-               (std::wcscmp(reinterpret_cast<LPCWSTR>(msg->lParam), L"ImmersiveColorSet") == 0)) {
+        bool themeChanged = false;
+        switch (msg->message) {
+        case WM_THEMECHANGED:
+        case WM_SYSCOLORCHANGE:
+        case WM_DWMCOLORIZATIONCOLORCHANGED:
+            themeChanged = true;
+            break;
+        case WM_SETTINGCHANGE: {
+            if ((msg->wParam == 0) && (msg->lParam != 0) && (std::wcscmp(reinterpret_cast<LPCWSTR>(msg->lParam), L"ImmersiveColorSet") == 0)) {
+                themeChanged = true;
+            }
+        } break;
+        default:
+            break;
+        }
+        if (themeChanged) {
             qDebug() << "Detected system theme change event.";
             Q_EMIT ThemeHelper::instance()->systemThemeChanged();
         }
@@ -81,7 +95,7 @@ QColor Theme::accentColor() const
     BOOL opaque = FALSE;
     const HRESULT hr = pDwmGetColorizationColor(&color, &opaque);
     if (FAILED(hr)) {
-        qDebug() << "DwmGetColorizationColor() failed.";
+        qDebug() << "DwmGetColorizationColor() failed with error code" << HRESULT_CODE(hr);
         return QColorConstants::DarkGray;
     }
     return QColor::fromRgba(color);
