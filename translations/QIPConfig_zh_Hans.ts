@@ -9,44 +9,57 @@
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="60"/>
+        <location filename="../qml/AboutDialog.qml" line="66"/>
         <source>Qt version (run-time): %1</source>
         <translation>Qt版本（运行时）：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="68"/>
+        <location filename="../qml/AboutDialog.qml" line="74"/>
         <source>Qt version (compile-time): %1</source>
         <translation>Qt版本（编译时）：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="76"/>
+        <location filename="../qml/AboutDialog.qml" line="82"/>
         <source>Qt ABI: %1</source>
         <translation>Qt应用程序二进制接口：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="84"/>
+        <location filename="../qml/AboutDialog.qml" line="90"/>
         <source>Qt Quick graphics API: %1</source>
         <translation>Qt Quick图形应用程序编程接口：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="92"/>
+        <location filename="../qml/AboutDialog.qml" line="98"/>
         <source>Compiler: %1</source>
         <translation>编译器：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="108"/>
+        <location filename="../qml/AboutDialog.qml" line="114"/>
         <source>Operating system: %1</source>
         <translation>操作系统：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="116"/>
+        <location filename="../qml/AboutDialog.qml" line="122"/>
         <source>CPU architecture: %1</source>
         <translation>中央处理器架构：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="100"/>
+        <location filename="../qml/AboutDialog.qml" line="106"/>
         <source>Compile date and time: %1</source>
         <translation>编译日期及时间：%1</translation>
+    </message>
+</context>
+<context>
+    <name>ClickableAppTitle</name>
+    <message>
+        <location filename="../qml/ClickableAppTitle.qml" line="36"/>
+        <source>%1 version %2 (%3)</source>
+        <translation>%1版本%2（%3）</translation>
+    </message>
+    <message>
+        <location filename="../qml/ClickableAppTitle.qml" line="52"/>
+        <source>Click to browse the repository at this point in the history.</source>
+        <translation>点击以浏览提交历史中当前提交时刻的仓库。</translation>
     </message>
 </context>
 <context>
@@ -241,6 +254,14 @@
         <location filename="../networkinformation.cpp" line="190"/>
         <source>WAITING</source>
         <translation>等待</translation>
+    </message>
+</context>
+<context>
+    <name>QtLogoButton</name>
+    <message>
+        <location filename="../qml/QtLogoButton.qml" line="54"/>
+        <source>Click to jump to Qt&apos;s official homepage.</source>
+        <translation>点击以跳转到Qt官方主页。</translation>
     </message>
 </context>
 <context>

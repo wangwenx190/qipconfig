@@ -77,6 +77,16 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(BUILD_SHARED_LIBS OFF)
 
+set(PROJECT_VERSION_COMMIT "UNKNOWN")
+find_program(GIT_EXECUTABLE_PATH git)
+if(GIT_EXECUTABLE_PATH AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git")
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE_PATH} rev-parse HEAD
+        OUTPUT_VARIABLE PROJECT_VERSION_COMMIT
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+endif()
+
 # FramelessHelper
 set(FRAMELESSHELPER_BUILD_STATIC ON)
 set(FRAMELESSHELPER_BUILD_WIDGETS OFF)
@@ -130,6 +140,8 @@ set(QML_SOURCES
     qml/AboutDialog.qml
     qml/AcrylicWindow.qml
     qml/main.qml
+    qml/QtLogoButton.qml
+    qml/ClickableAppTitle.qml
 )
 
 qt_add_qml_module(${PROJECT_NAME}
@@ -171,6 +183,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     QT_DEPRECATED_WARNINGS
     QT_DISABLE_DEPRECATED_BEFORE=0x060400
     $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>
+    PROJECT_VERSION_COMMIT="${PROJECT_VERSION_COMMIT}"
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE

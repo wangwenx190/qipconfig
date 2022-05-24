@@ -26,22 +26,20 @@
 #include <QtCore/qdatastream.h>
 #include <QtCore/qvariant.h>
 #include <QtCore/qsettings.h>
+#include <QtGui/qdesktopservices.h>
 #include <QtGui/qguiapplication.h>
 #include <QtGui/qclipboard.h>
 
-static constexpr const QByteArray::Base64Options kEncryptOptions = (QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals);
 static constexpr const QDataStream::Version kFormatVersion = QDataStream::Qt_6_3;
-static constexpr const quint32 kUniqueIdentifier = 0xA0B0C0D0;
+static constexpr const quint32 kMagicNumber = 0xA0B0C0D0;
 
 static const QString kGeometryKey = u"Window/Geometry"_qs;
 static const QString kStateKey = u"Window/State"_qs;
 
-[[nodiscard]] static inline QString applicationUri()
+[[nodiscard]] static inline QString settingsFormatIdentifier()
 {
-    static const QString uri = (u"org.%1.%2/%3"_qs).arg(
-          QCoreApplication::organizationName(),
-          QCoreApplication::applicationName(),
-          QCoreApplication::applicationVersion());
+    static const QString uri = (u"org.%1.%2.settings/1.0"_qs).arg(
+          QCoreApplication::organizationName(), QCoreApplication::applicationName());
     return uri;
 }
 
@@ -51,17 +49,10 @@ static const QString kStateKey = u"Window/State"_qs;
     if (!var.isValid()) {
         return {};
     }
-    const QByteArray encryptedData = [&var]() -> QByteArray {
-        QByteArray data = {};
-        QDataStream stream(&data, QDataStream::WriteOnly);
-        stream.setVersion(kFormatVersion);
-        stream << kUniqueIdentifier << applicationUri() << var;
-        return data.toBase64(kEncryptOptions);
-    }();
     QByteArray result = {};
     QDataStream stream(&result, QDataStream::WriteOnly);
     stream.setVersion(kFormatVersion);
-    stream << encryptedData;
+    stream << kMagicNumber << settingsFormatIdentifier() << var;
     return result;
 }
 
@@ -71,38 +62,18 @@ static const QString kStateKey = u"Window/State"_qs;
     if (ba.isEmpty()) {
         return {};
     }
-    const QByteArray decryptedData = [&ba]() -> QByteArray {
-        QByteArray data = {};
-        QDataStream stream(ba);
-        stream.setVersion(kFormatVersion);
-        stream >> data;
-        if (data.isEmpty()) {
-            qWarning() << "Failed to parse the binary data.";
-            return {};
-        }
-        const QByteArray::FromBase64Result result = QByteArray::fromBase64Encoding(data, kEncryptOptions);
-        if (result.decodingStatus != QByteArray::Base64DecodingStatus::Ok) {
-            qWarning() << "Failed to decode the Base64 encoding data.";
-            return {};
-        }
-        return result.decoded;
-    }();
-    if (decryptedData.isEmpty()) {
-        qWarning() << "Failed to decrypt the settings data.";
-        return {};
-    }
-    QDataStream stream(decryptedData);
+    QDataStream stream(ba);
     stream.setVersion(kFormatVersion);
-    quint32 identifier = 0;
-    stream >> identifier;
-    if (identifier != kUniqueIdentifier) {
+    quint32 magicNumber = 0;
+    stream >> magicNumber;
+    if (magicNumber != kMagicNumber) {
         qWarning() << "Settings: data format not valid.";
         return {};
     }
-    QString uri = {};
-    stream >> uri;
-    if (uri != applicationUri()) {
-        qWarning() << "Settings: product URI does not match.";
+    QString identifier = {};
+    stream >> identifier;
+    if (identifier != settingsFormatIdentifier()) {
+        qWarning() << "Settings: data format does not match.";
         return {};
     }
     QVariant var = {};
@@ -157,4 +128,15 @@ bool Utils::restoreGeometry(QWindow *window)
     window->setGeometry(geometry);
     window->setWindowState(state);
     return true;
+}
+
+void Utils::openUrl(const QUrl &url)
+{
+    Q_ASSERT(url.isValid());
+    if (!url.isValid()) {
+        return;
+    }
+    if (!QDesktopServices::openUrl(url)) {
+        qWarning() << "Failed to open url" << url;
+    }
 }

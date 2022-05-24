@@ -52,6 +52,12 @@ AcrylicWindow {
         }
         spacing: Theme.contentsMargin
 
+        QtLogoButton {
+            Layout.alignment: Qt.AlignHCenter
+        }
+
+        ClickableAppTitle {}
+
         Label {
             font {
                 bold: true

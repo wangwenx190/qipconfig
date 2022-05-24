@@ -22,34 +22,33 @@
  * SOFTWARE.
  */
 
-#pragma once
+import QtQuick
+import QtQuick.Controls
+import QIPConfig
 
-#include <QtCore/qobject.h>
-#include <QtCore/qurl.h>
-#include <QtGui/qwindow.h>
-#include <QtQml/qqmlregistration.h>
+Label {
+    font {
+        bold: true
+        pointSize: Theme.contentFontSize
+        italic: mouseArea.containsMouse
+    }
+    color: mouseArea.containsMouse ? Qt.lighter(Theme.accentColor, 1.5) : Theme.accentColor
+    text: qsTr("%1 version %2 (%3)").arg(Application.name)
+                                    .arg(Application.version)
+                                    .arg(DeveloperInformation.appCommitHashShort)
 
-QT_BEGIN_NAMESPACE
-class QSettings;
-QT_END_NAMESPACE
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        hoverEnabled: true
+        onEntered: cursorShape = Qt.PointingHandCursor
+        onExited: cursorShape = Qt.ArrowCursor
+        onClicked: Utils.openUrl("https://github.com/wangwenx190/qipconfig/tree/" + DeveloperInformation.appCommitHash)
+    }
 
-class Utils : public QObject
-{
-    Q_OBJECT
-    QML_ELEMENT
-    QML_SINGLETON
-    Q_DISABLE_COPY_MOVE(Utils)
-
-public:
-    explicit Utils(QObject *parent = nullptr);
-    ~Utils() override;
-
-public Q_SLOTS:
-    void copyToClipboard(const QString &text);
-    void saveGeometry(QWindow *window);
-    [[nodiscard]] bool restoreGeometry(QWindow *window);
-    void openUrl(const QUrl &url);
-
-private:
-    QScopedPointer<QSettings> m_settings;
-};
+    ToolTip {
+        delay: 0
+        visible: mouseArea.containsMouse
+        text: qsTr("Click to browse the repository at this point in the history.")
+    }
+}

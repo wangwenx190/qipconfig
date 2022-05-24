@@ -22,34 +22,35 @@
  * SOFTWARE.
  */
 
-#pragma once
+import QtQuick
+import QtQuick.Controls
+import QIPConfig
 
-#include <QtCore/qobject.h>
-#include <QtCore/qurl.h>
-#include <QtGui/qwindow.h>
-#include <QtQml/qqmlregistration.h>
+Item {
+    implicitWidth: 100
+    implicitHeight: 80
 
-QT_BEGIN_NAMESPACE
-class QSettings;
-QT_END_NAMESPACE
 
-class Utils : public QObject
-{
-    Q_OBJECT
-    QML_ELEMENT
-    QML_SINGLETON
-    Q_DISABLE_COPY_MOVE(Utils)
+    Image {
+        anchors.fill: parent
+        smooth: true
+        mipmap: true
+        fillMode: Image.PreserveAspectFit
+        source: "qrc:///images/qt_logo_green_rgb.svg"
+    }
 
-public:
-    explicit Utils(QObject *parent = nullptr);
-    ~Utils() override;
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        hoverEnabled: true
+        onEntered: cursorShape = Qt.PointingHandCursor
+        onExited: cursorShape = Qt.ArrowCursor
+        onClicked: Utils.openUrl("https://www.qt.io/")
+    }
 
-public Q_SLOTS:
-    void copyToClipboard(const QString &text);
-    void saveGeometry(QWindow *window);
-    [[nodiscard]] bool restoreGeometry(QWindow *window);
-    void openUrl(const QUrl &url);
-
-private:
-    QScopedPointer<QSettings> m_settings;
-};
+    ToolTip {
+        delay: 0
+        visible: mouseArea.containsMouse
+        text: qsTr("Click to jump to Qt's official homepage.")
+    }
+}

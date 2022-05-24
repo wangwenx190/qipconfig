@@ -126,3 +126,15 @@ QString DeveloperInformation::qtBuildInfo() const
     static const QString result = QString::fromUtf8(QLibraryInfo::build());
     return result;
 }
+
+QString DeveloperInformation::appCommitHash() const
+{
+    static const QString result = QString::fromUtf8(PROJECT_VERSION_COMMIT);
+    return result;
+}
+
+QString DeveloperInformation::appCommitHashShort() const
+{
+    static const QString result = appCommitHash().first(6);
+    return result;
+}
