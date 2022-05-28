@@ -35,8 +35,7 @@ AcrylicWindow {
     visible: false
     title: qsTr("About")
 
-    function show2() {
-        show();
+    function bringWindowToFront() {
         FramelessHelper.bringWindowToFront();
     }
 

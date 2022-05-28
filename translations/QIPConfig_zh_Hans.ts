@@ -9,42 +9,42 @@
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="66"/>
+        <location filename="../qml/AboutDialog.qml" line="71"/>
         <source>Qt version (run-time): %1</source>
         <translation>Qt版本（运行时）：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="74"/>
+        <location filename="../qml/AboutDialog.qml" line="80"/>
         <source>Qt version (compile-time): %1</source>
         <translation>Qt版本（编译时）：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="82"/>
+        <location filename="../qml/AboutDialog.qml" line="89"/>
         <source>Qt ABI: %1</source>
         <translation>Qt应用程序二进制接口：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="90"/>
+        <location filename="../qml/AboutDialog.qml" line="98"/>
         <source>Qt Quick graphics API: %1</source>
         <translation>Qt Quick图形应用程序编程接口：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="98"/>
+        <location filename="../qml/AboutDialog.qml" line="107"/>
         <source>Compiler: %1</source>
         <translation>编译器：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="114"/>
+        <location filename="../qml/AboutDialog.qml" line="125"/>
         <source>Operating system: %1</source>
         <translation>操作系统：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="122"/>
+        <location filename="../qml/AboutDialog.qml" line="134"/>
         <source>CPU architecture: %1</source>
         <translation>中央处理器架构：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="106"/>
+        <location filename="../qml/AboutDialog.qml" line="116"/>
         <source>Compile date and time: %1</source>
         <translation>编译日期及时间：%1</translation>
     </message>
