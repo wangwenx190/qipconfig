@@ -25,7 +25,6 @@
 #include "translationmanager.h"
 #include <QtCore/qtranslator.h>
 #include <QtCore/qcoreapplication.h>
-#include <QtQml/qqmlengine.h>
 
 static struct {
     QTranslator *translator = nullptr;

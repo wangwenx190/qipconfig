@@ -27,7 +27,7 @@ import QtQml
 QtObject {
     property MainWindow mainWindow: MainWindow {
         id: mainWindow
-        onShowAboutDialog: aboutDialog.show()
+        onShowAboutDialog: aboutDialog.show2()
         onClosing: aboutDialog.close()
     }
 

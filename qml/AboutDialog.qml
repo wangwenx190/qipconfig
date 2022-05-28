@@ -35,6 +35,11 @@ AcrylicWindow {
     visible: false
     title: qsTr("About")
 
+    function show2() {
+        show();
+        FramelessHelper.bringWindowToFront();
+    }
+
     FramelessHelper.onReady: {
         FramelessHelper.windowFixedSize = true;
         FramelessHelper.titleBarItem = titleBar;
@@ -63,6 +68,7 @@ AcrylicWindow {
                 bold: true
                 pointSize: Theme.contentFontSize
             }
+            color: Theme.labelColor
             text: qsTr("Qt version (run-time): %1").arg(DeveloperInformation.qtRunTimeVersion)
         }
 
@@ -71,6 +77,7 @@ AcrylicWindow {
                 bold: true
                 pointSize: Theme.contentFontSize
             }
+            color: Theme.labelColor
             text: qsTr("Qt version (compile-time): %1").arg(DeveloperInformation.qtCompileTimeVersion)
         }
 
@@ -79,6 +86,7 @@ AcrylicWindow {
                 bold: true
                 pointSize: Theme.contentFontSize
             }
+            color: Theme.labelColor
             text: qsTr("Qt ABI: %1").arg(DeveloperInformation.qtAbiInfo)
         }
 
@@ -87,6 +95,7 @@ AcrylicWindow {
                 bold: true
                 pointSize: Theme.contentFontSize
             }
+            color: Theme.labelColor
             text: qsTr("Qt Quick graphics API: %1").arg(DeveloperInformation.graphicsApi)
         }
 
@@ -95,6 +104,7 @@ AcrylicWindow {
                 bold: true
                 pointSize: Theme.contentFontSize
             }
+            color: Theme.labelColor
             text: qsTr("Compiler: %1").arg(DeveloperInformation.compilerInfo)
         }
 
@@ -103,6 +113,7 @@ AcrylicWindow {
                 bold: true
                 pointSize: Theme.contentFontSize
             }
+            color: Theme.labelColor
             text: qsTr("Compile date and time: %1").arg(DeveloperInformation.compileDateTime)
         }
 
@@ -111,6 +122,7 @@ AcrylicWindow {
                 bold: true
                 pointSize: Theme.contentFontSize
             }
+            color: Theme.labelColor
             text: qsTr("Operating system: %1").arg(DeveloperInformation.systemInfo)
         }
 
@@ -119,6 +131,7 @@ AcrylicWindow {
                 bold: true
                 pointSize: Theme.contentFontSize
             }
+            color: Theme.labelColor
             text: qsTr("CPU architecture: %1").arg(DeveloperInformation.cpuArchitecture)
         }
 

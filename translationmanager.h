@@ -26,9 +26,9 @@
 
 #include <QtCore/qobject.h>
 #include <QtCore/qpointer.h>
+#include <QtQml/qqmlengine.h>
 
 QT_BEGIN_NAMESPACE
-class QQmlEngine;
 class QTranslator;
 QT_END_NAMESPACE
 

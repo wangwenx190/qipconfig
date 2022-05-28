@@ -40,7 +40,13 @@ Theme::Theme(QObject *parent) : QObject(parent)
 #ifdef Q_OS_WINDOWS
         setupWin32ThemeChangeNotifier();
 #else
-        installEventFilter(this);
+        connect(qGuiApp, &QGuiApplication::focusWindowChanged, this, [this](QWindow *window){
+            if (!window) {
+                return;
+            }
+            window->removeEventFilter(this);
+            window->installEventFilter(this);
+        });
 #endif
         connect(themeHelper, &ThemeHelper::systemThemeChanged, this, &Theme::refresh);
     }
@@ -145,11 +151,11 @@ bool Theme::eventFilter(QObject *object, QEvent *event)
     switch (event->type()) {
     case QEvent::ThemeChange: {
         qDebug() << "Detected system theme change event.";
-        Q_EMIT themeChanged();
+        refresh();
     } break;
     case QEvent::ApplicationPaletteChange: {
         qDebug() << "Detected application palette change event.";
-        Q_EMIT themeChanged();
+        refresh();
     } break;
     default:
         break;
