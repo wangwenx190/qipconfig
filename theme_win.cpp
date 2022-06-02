@@ -23,64 +23,10 @@
  */
 
 #include "theme.h"
-#include "themehelper.h"
 #include <QtCore/qdebug.h>
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qabstractnativeeventfilter.h>
-#include <QtCore/private/qsystemlibrary_p.h>
 #include <QtCore/qt_windows.h>
+#include <QtCore/private/qsystemlibrary_p.h>
 #include <dwmapi.h>
-
-class ThemeWin32EventFilter : public QAbstractNativeEventFilter
-{
-    Q_DISABLE_COPY_MOVE(ThemeWin32EventFilter)
-
-public:
-    explicit ThemeWin32EventFilter() : QAbstractNativeEventFilter() {}
-    ~ThemeWin32EventFilter() override = default;
-
-    [[nodiscard]] bool nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result) override
-    {
-        if ((eventType != "windows_generic_MSG"_qba) || !message || !result) {
-            return false;
-        }
-        const auto msg = static_cast<LPMSG>(message);
-        if (!msg->hwnd) {
-            return false;
-        }
-        bool themeChanged = false;
-        switch (msg->message) {
-        case WM_THEMECHANGED:
-        case WM_SYSCOLORCHANGE:
-        case WM_DWMCOLORIZATIONCOLORCHANGED:
-            themeChanged = true;
-            break;
-        case WM_SETTINGCHANGE: {
-            if ((msg->wParam == 0) && (msg->lParam != 0) && (std::wcscmp(reinterpret_cast<LPCWSTR>(msg->lParam), L"ImmersiveColorSet") == 0)) {
-                themeChanged = true;
-            }
-        } break;
-        default:
-            break;
-        }
-        if (themeChanged) {
-            qDebug() << "Detected system theme change event.";
-            Q_EMIT ThemeHelper::instance()->systemThemeChanged();
-        }
-        return false;
-    }
-};
-
-Q_GLOBAL_STATIC(QScopedPointer<ThemeWin32EventFilter>, themeWin32EventFilter)
-
-void setupWin32ThemeChangeNotifier()
-{
-    if (!themeWin32EventFilter()->isNull()) {
-        return;
-    }
-    themeWin32EventFilter()->reset(new ThemeWin32EventFilter);
-    qApp->installNativeEventFilter(themeWin32EventFilter()->get());
-}
 
 QColor Theme::accentColor() const
 {

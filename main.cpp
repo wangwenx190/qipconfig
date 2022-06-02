@@ -34,8 +34,8 @@
 #include <framelessquickmodule.h>
 #include <qtacrylicmaterialplugin.h>
 #include <singleapplication.h>
+#include "theme.h"
 #include "translationmanager.h"
-#include "themehelper.h"
 #include "networkadaptermodel.h"
 #ifdef Q_OS_WINDOWS
 #  include <QtCore/qt_windows.h>
@@ -74,18 +74,18 @@ FRAMELESSHELPER_USE_NAMESPACE
     return defaultLanguage;
 }
 
-[[nodiscard]] static inline ThemeHelper::Theme getPreferredTheme(const QString &input)
+[[nodiscard]] static inline Theme::ThemeType getPreferredTheme(const QString &input)
 {
     if (input.isEmpty()) {
-        return ThemeHelper::Theme::System;
+        return Theme::ThemeType::System;
     }
     if (isInsensitiveEqual(input, u"light"_qs)) {
-        return ThemeHelper::Theme::Light;
+        return Theme::ThemeType::Light;
     }
     if (isInsensitiveEqual(input, u"dark"_qs)) {
-        return ThemeHelper::Theme::Dark;
+        return Theme::ThemeType::Dark;
     }
-    return ThemeHelper::Theme::System;
+    return Theme::ThemeType::System;
 }
 
 [[nodiscard]] static inline std::optional<QSGRendererInterface::GraphicsApi> getPreferredGraphicsApi(const QString &input)
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
     QGuiApplication::setApplicationDisplayName(u"QIPConfig"_qs);
     QCoreApplication::setApplicationVersion(u"1.0.0.0"_qs);
     QCoreApplication::setOrganizationName(u"wangwenx190"_qs);
-    QCoreApplication::setOrganizationDomain(u"wangwenx190.github.io"_qs);
+    QCoreApplication::setOrganizationDomain(u"https://github.com/wangwenx190/QIPConfig/"_qs);
 
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::Round);
 
@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
 
     commandLine.process(application);
 
-    ThemeHelper::instance()->setPreferredTheme(getPreferredTheme(commandLine.value(themeOption)));
+    Theme::setPreferredTheme(getPreferredTheme(commandLine.value(themeOption)));
 
     const std::optional<QSGRendererInterface::GraphicsApi> preferredGraphicsApi = getPreferredGraphicsApi(commandLine.value(graphicsApiOption));
     if (preferredGraphicsApi.has_value()) {

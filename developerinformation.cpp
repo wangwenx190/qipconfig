@@ -135,6 +135,6 @@ QString DeveloperInformation::appCommitHash() const
 
 QString DeveloperInformation::appCommitHashShort() const
 {
-    static const QString result = appCommitHash().first(6);
+    static const QString result = appCommitHash().first(8);
     return result;
 }

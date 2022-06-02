@@ -23,37 +23,24 @@
  */
 
 #include "theme.h"
-#include "themehelper.h"
 #include <QtGui/qpa/qplatformtheme.h>
 #include <QtGui/private/qguiapplication_p.h>
-
-#ifdef Q_OS_WINDOWS
-extern void setupWin32ThemeChangeNotifier();
-#endif
 
 Theme::Theme(QObject *parent) : QObject(parent)
 {
     qRegisterMetaType<ThemeType>();
-    const ThemeHelper * const themeHelper = ThemeHelper::instance();
-    connect(themeHelper, &ThemeHelper::preferredThemeChanged, this, &Theme::preferredThemeChanged);
-    if (preferredTheme() == ThemeType::System) {
-#ifdef Q_OS_WINDOWS
-        setupWin32ThemeChangeNotifier();
-#else
-        connect(qGuiApp, &QGuiApplication::focusWindowChanged, this, [this](QWindow *window){
-            if (!window) {
-                return;
-            }
-            window->removeEventFilter(this);
-            window->installEventFilter(this);
-        });
-#endif
-        connect(themeHelper, &ThemeHelper::systemThemeChanged, this, &Theme::refresh);
-    }
     refresh();
 }
 
 Theme::~Theme() = default;
+
+void Theme::setPreferredTheme(const ThemeType value)
+{
+    if (m_preferredTheme == value) {
+        return;
+    }
+    m_preferredTheme = value;
+}
 
 Theme::ThemeType Theme::theme() const
 {
@@ -62,15 +49,7 @@ Theme::ThemeType Theme::theme() const
 
 Theme::ThemeType Theme::preferredTheme() const
 {
-    switch (ThemeHelper::instance()->getPreferredTheme()) {
-    case ThemeHelper::Theme::Light:
-        return ThemeType::Light;
-    case ThemeHelper::Theme::Dark:
-        return ThemeType::Dark;
-    case ThemeHelper::Theme::System:
-        return ThemeType::System;
-    }
-    return ThemeType::System;
+    return m_preferredTheme;
 }
 
 QColor Theme::labelColor() const
@@ -165,15 +144,26 @@ bool Theme::eventFilter(QObject *object, QEvent *event)
 
 void Theme::refresh()
 {
-    m_dark = [this]() -> bool {
-        const ThemeType preferred = preferredTheme();
-        if (preferred == ThemeType::System) {
+    m_dark = []() -> bool {
+        if (m_preferredTheme == ThemeType::System) {
             if (const QPlatformTheme * const theme = QGuiApplicationPrivate::platformTheme()) {
                 return (theme->appearance() == QPlatformTheme::Appearance::Dark);
             }
             return false;
         }
-        return (preferred == ThemeType::Dark);
+        return (m_preferredTheme == ThemeType::Dark);
     }();
     Q_EMIT themeChanged();
+}
+
+void Theme::setup(QWindow * const window)
+{
+    Q_ASSERT(window);
+    if (!window) {
+        return;
+    }
+    if (m_preferredTheme != ThemeType::System) {
+        return;
+    }
+    window->installEventFilter(this);
 }

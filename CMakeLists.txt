@@ -115,7 +115,6 @@ target_sources(${PROJECT_NAME} PRIVATE
     networkinformation.h networkinformation.cpp
     utils.h utils.cpp
     theme.h theme.cpp
-    themehelper.h themehelper.cpp
     translationmanager.h translationmanager.cpp
     developerinformation.h developerinformation.cpp
     main.cpp

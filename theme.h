@@ -27,6 +27,7 @@
 #include <QtCore/qobject.h>
 #include <QtCore/qsize.h>
 #include <QtGui/qcolor.h>
+#include <QtGui/qwindow.h>
 #include <QtQml/qqmlregistration.h>
 
 class Theme : public QObject
@@ -37,7 +38,7 @@ class Theme : public QObject
     Q_DISABLE_COPY_MOVE(Theme)
 
     Q_PROPERTY(ThemeType theme READ theme NOTIFY themeChanged FINAL)
-    Q_PROPERTY(ThemeType preferredTheme READ preferredTheme NOTIFY preferredThemeChanged FINAL)
+    Q_PROPERTY(ThemeType preferredTheme READ preferredTheme CONSTANT FINAL)
     Q_PROPERTY(QColor accentColor READ accentColor NOTIFY themeChanged FINAL)
     Q_PROPERTY(QColor labelColor READ labelColor NOTIFY themeChanged FINAL)
     Q_PROPERTY(qreal titleFontSize READ titleFontSize CONSTANT FINAL)
@@ -60,6 +61,8 @@ public:
     explicit Theme(QObject *parent = nullptr);
     ~Theme() override;
 
+    static void setPreferredTheme(const ThemeType value);
+
     [[nodiscard]] ThemeType theme() const;
     [[nodiscard]] ThemeType preferredTheme() const;
     [[nodiscard]] QColor accentColor() const;
@@ -79,14 +82,15 @@ public:
 
 public Q_SLOTS:
     void refresh();
+    void setup(QWindow * const window);
 
 protected:
     [[nodiscard]] bool eventFilter(QObject *object, QEvent *event) override;
 
 Q_SIGNALS:
     void themeChanged();
-    void preferredThemeChanged();
 
 private:
     bool m_dark = false;
+    static inline ThemeType m_preferredTheme = ThemeType::System;
 };

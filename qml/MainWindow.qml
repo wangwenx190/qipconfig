@@ -35,6 +35,7 @@ AcrylicWindow {
     visible: false
     title: Application.displayName
     onClosing: Utils.saveGeometry(window)
+    Component.onCompleted: Theme.setup(window)
 
     signal showAboutDialog()
 
