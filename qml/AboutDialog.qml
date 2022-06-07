@@ -35,6 +35,8 @@ AcrylicWindow {
     visible: false
     title: qsTr("About")
 
+    property font labelFont: Qt.font({ bold:true, pointSize:Theme.contentFontSize })
+
     function bringWindowToFront() {
         FramelessHelper.bringWindowToFront();
     }
@@ -58,78 +60,58 @@ AcrylicWindow {
 
         QtLogoButton {
             Layout.alignment: Qt.AlignHCenter
+            onClicked: Utils.openUrl("https://www.qt.io/")
         }
 
-        ClickableAppTitle {}
+        ClickableAppTitle {
+            Layout.alignment: Qt.AlignHCenter
+            onClicked: Utils.openUrl("https://github.com/wangwenx190/qipconfig/tree/" + DeveloperInformation.appCommitHash)
+        }
 
         Label {
-            font {
-                bold: true
-                pointSize: Theme.contentFontSize
-            }
+            font: window.labelFont
             color: Theme.labelColor
             text: qsTr("Qt version (run-time): %1").arg(DeveloperInformation.qtRunTimeVersion)
         }
 
         Label {
-            font {
-                bold: true
-                pointSize: Theme.contentFontSize
-            }
+            font: window.labelFont
             color: Theme.labelColor
             text: qsTr("Qt version (compile-time): %1").arg(DeveloperInformation.qtCompileTimeVersion)
         }
 
         Label {
-            font {
-                bold: true
-                pointSize: Theme.contentFontSize
-            }
+            font: window.labelFont
             color: Theme.labelColor
             text: qsTr("Qt ABI: %1").arg(DeveloperInformation.qtAbiInfo)
         }
 
         Label {
-            font {
-                bold: true
-                pointSize: Theme.contentFontSize
-            }
+            font: window.labelFont
             color: Theme.labelColor
             text: qsTr("Qt Quick graphics API: %1").arg(DeveloperInformation.graphicsApi)
         }
 
         Label {
-            font {
-                bold: true
-                pointSize: Theme.contentFontSize
-            }
+            font: window.labelFont
             color: Theme.labelColor
             text: qsTr("Compiler: %1").arg(DeveloperInformation.compilerInfo)
         }
 
         Label {
-            font {
-                bold: true
-                pointSize: Theme.contentFontSize
-            }
+            font: window.labelFont
             color: Theme.labelColor
             text: qsTr("Compile date and time: %1").arg(DeveloperInformation.compileDateTime)
         }
 
         Label {
-            font {
-                bold: true
-                pointSize: Theme.contentFontSize
-            }
+            font: window.labelFont
             color: Theme.labelColor
             text: qsTr("Operating system: %1").arg(DeveloperInformation.systemInfo)
         }
 
         Label {
-            font {
-                bold: true
-                pointSize: Theme.contentFontSize
-            }
+            font: window.labelFont
             color: Theme.labelColor
             text: qsTr("CPU architecture: %1").arg(DeveloperInformation.cpuArchitecture)
         }

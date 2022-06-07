@@ -26,31 +26,24 @@ import QtQuick
 import QtQuick.Controls
 import QIPConfig
 
-Item {
+Button {
+    id: button
     implicitWidth: 100
     implicitHeight: 80
 
 
-    Image {
+    contentItem: Image {
         anchors.fill: parent
-        smooth: true
         mipmap: true
         fillMode: Image.PreserveAspectFit
         source: "qrc:///images/qt_logo_green_rgb.svg"
     }
 
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        hoverEnabled: true
-        onEntered: cursorShape = Qt.PointingHandCursor
-        onExited: cursorShape = Qt.ArrowCursor
-        onClicked: Utils.openUrl("https://www.qt.io/")
-    }
+    background: null
 
     ToolTip {
         delay: 0
-        visible: mouseArea.containsMouse
+        visible: button.hovered
         text: qsTr("Click to jump to Qt's official homepage.")
     }
 }

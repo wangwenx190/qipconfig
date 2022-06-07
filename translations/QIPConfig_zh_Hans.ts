@@ -9,7 +9,7 @@
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="71"/>
+        <location filename="../qml/AboutDialog.qml" line="74"/>
         <source>Qt version (run-time): %1</source>
         <translation>Qt版本（运行时）：%1</translation>
     </message>
@@ -19,32 +19,32 @@
         <translation>Qt版本（编译时）：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="89"/>
+        <location filename="../qml/AboutDialog.qml" line="86"/>
         <source>Qt ABI: %1</source>
         <translation>Qt应用程序二进制接口：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="98"/>
+        <location filename="../qml/AboutDialog.qml" line="92"/>
         <source>Qt Quick graphics API: %1</source>
         <translation>Qt Quick图形应用程序编程接口：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="107"/>
+        <location filename="../qml/AboutDialog.qml" line="98"/>
         <source>Compiler: %1</source>
         <translation>编译器：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="125"/>
+        <location filename="../qml/AboutDialog.qml" line="110"/>
         <source>Operating system: %1</source>
         <translation>操作系统：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="134"/>
+        <location filename="../qml/AboutDialog.qml" line="116"/>
         <source>CPU architecture: %1</source>
         <translation>中央处理器架构：%1</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="116"/>
+        <location filename="../qml/AboutDialog.qml" line="104"/>
         <source>Compile date and time: %1</source>
         <translation>编译日期及时间：%1</translation>
     </message>
@@ -52,12 +52,12 @@
 <context>
     <name>ClickableAppTitle</name>
     <message>
-        <location filename="../qml/ClickableAppTitle.qml" line="36"/>
+        <location filename="../qml/ClickableAppTitle.qml" line="39"/>
         <source>%1 version %2 (%3)</source>
         <translation>%1版本%2（%3）</translation>
     </message>
     <message>
-        <location filename="../qml/ClickableAppTitle.qml" line="52"/>
+        <location filename="../qml/ClickableAppTitle.qml" line="49"/>
         <source>Click to browse the repository at this point in the history.</source>
         <translation>点击以浏览提交历史中当前提交时刻的仓库。</translation>
     </message>
@@ -94,7 +94,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../qml/MainWindow.qml" line="85"/>
+        <location filename="../qml/MainWindow.qml" line="88"/>
         <source>Internet Address</source>
         <translation>网络地址</translation>
     </message>
@@ -104,105 +104,105 @@
         <translation>本地地址</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="135"/>
+        <location filename="../qml/MainWindow.qml" line="132"/>
         <source>Local Host</source>
         <translation>本地主机</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="160"/>
+        <location filename="../qml/MainWindow.qml" line="154"/>
         <source>Local Domain</source>
         <translation>本地域</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="244"/>
+        <location filename="../qml/MainWindow.qml" line="229"/>
         <source>Hardware Address</source>
         <translation>硬件地址</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="261"/>
+        <location filename="../qml/MainWindow.qml" line="243"/>
         <source>IPv4 Address</source>
         <translation>IPv4地址</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="278"/>
+        <location filename="../qml/MainWindow.qml" line="257"/>
         <source>IPv6 Address</source>
         <translation>IPv6地址</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="295"/>
+        <location filename="../qml/MainWindow.qml" line="271"/>
         <source>Netmask</source>
         <translation>子网掩码</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="312"/>
+        <location filename="../qml/MainWindow.qml" line="285"/>
         <source>Broadcast Address</source>
         <translation>广播地址</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="361"/>
+        <location filename="../qml/MainWindow.qml" line="334"/>
         <source>Network Status</source>
         <translation>网络状态</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="373"/>
-        <location filename="../qml/MainWindow.qml" line="407"/>
+        <location filename="../qml/MainWindow.qml" line="343"/>
+        <location filename="../qml/MainWindow.qml" line="374"/>
         <source>UNKNOWN</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="375"/>
+        <location filename="../qml/MainWindow.qml" line="345"/>
         <source>ONLINE</source>
         <translation>在线</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="377"/>
+        <location filename="../qml/MainWindow.qml" line="347"/>
         <source>OFFLINE</source>
         <translation>离线</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="395"/>
+        <location filename="../qml/MainWindow.qml" line="365"/>
         <source>Transport Medium</source>
         <translation>传输介质</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="409"/>
+        <location filename="../qml/MainWindow.qml" line="376"/>
         <source>ETHERNET</source>
         <translation>以太网</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="411"/>
+        <location filename="../qml/MainWindow.qml" line="378"/>
         <source>CELLULAR</source>
         <translation>蜂窝网络</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="413"/>
+        <location filename="../qml/MainWindow.qml" line="380"/>
         <source>WIFI</source>
         <translation>无线局域网</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="415"/>
+        <location filename="../qml/MainWindow.qml" line="382"/>
         <source>BLUETOOTH</source>
         <translation>蓝牙</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="433"/>
+        <location filename="../qml/MainWindow.qml" line="400"/>
         <source>Behind Captive Portal</source>
         <translation>强制网络门户</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="442"/>
-        <location filename="../qml/MainWindow.qml" line="467"/>
+        <location filename="../qml/MainWindow.qml" line="406"/>
+        <location filename="../qml/MainWindow.qml" line="428"/>
         <source>YES</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="442"/>
-        <location filename="../qml/MainWindow.qml" line="467"/>
+        <location filename="../qml/MainWindow.qml" line="406"/>
+        <location filename="../qml/MainWindow.qml" line="428"/>
         <source>NO</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="458"/>
+        <location filename="../qml/MainWindow.qml" line="422"/>
         <source>Metered</source>
         <translation>按流量计费</translation>
     </message>
@@ -259,7 +259,7 @@
 <context>
     <name>QtLogoButton</name>
     <message>
-        <location filename="../qml/QtLogoButton.qml" line="54"/>
+        <location filename="../qml/QtLogoButton.qml" line="47"/>
         <source>Click to jump to Qt&apos;s official homepage.</source>
         <translation>点击以跳转到Qt官方主页。</translation>
     </message>

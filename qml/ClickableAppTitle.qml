@@ -26,29 +26,26 @@ import QtQuick
 import QtQuick.Controls
 import QIPConfig
 
-Label {
-    font {
-        bold: true
-        pointSize: Theme.contentFontSize
-        italic: mouseArea.containsMouse
-    }
-    color: mouseArea.containsMouse ? Qt.lighter(Theme.accentColor, 1.5) : Theme.accentColor
-    text: qsTr("%1 version %2 (%3)").arg(Application.name)
-                                    .arg(Application.version)
-                                    .arg(DeveloperInformation.appCommitHashShort)
+Button {
+    id: button
 
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        hoverEnabled: true
-        onEntered: cursorShape = Qt.PointingHandCursor
-        onExited: cursorShape = Qt.ArrowCursor
-        onClicked: Utils.openUrl("https://github.com/wangwenx190/qipconfig/tree/" + DeveloperInformation.appCommitHash)
+    contentItem: Label {
+        font {
+            bold: true
+            pointSize: Theme.contentFontSize
+            italic: button.hovered
+        }
+        color: button.hovered ? Qt.lighter(Theme.accentColor, 1.5) : Theme.accentColor
+        text: qsTr("%1 version %2 (%3)").arg(Application.name)
+                                        .arg(Application.version)
+                                        .arg(DeveloperInformation.appCommitHashShort)
     }
+
+    background: null
 
     ToolTip {
         delay: 0
-        visible: mouseArea.containsMouse
+        visible: button.hovered
         text: qsTr("Click to browse the repository at this point in the history.")
     }
 }

@@ -37,6 +37,9 @@ AcrylicWindow {
     onClosing: Utils.saveGeometry(window)
     Component.onCompleted: Theme.setup(window)
 
+    property font titleFont: Qt.font({ bold:true,pointSize:Theme.titleFontSize })
+    property font largeContentFont: Qt.font({ bold:true,pointSize:Theme.largeContentFontSize })
+
     signal showAboutDialog()
 
     function bringWindowToFront() {
@@ -86,10 +89,7 @@ AcrylicWindow {
                 }
 
                 ClickableLabel {
-                    font {
-                        pointSize: Theme.largeContentFontSize
-                        bold: true
-                    }
+                    font: window.largeContentFont
                     color: Theme.labelColor
                     text: NetworkInformation.internetAddress
                 }
@@ -111,10 +111,7 @@ AcrylicWindow {
                 }
 
                 ClickableLabel {
-                    font {
-                        pointSize: Theme.largeContentFontSize
-                        bold: true
-                    }
+                    font: window.largeContentFont
                     color: Theme.labelColor
                     text: NetworkInformation.localAddress
                 }
@@ -136,10 +133,7 @@ AcrylicWindow {
                 }
 
                 ClickableLabel {
-                    font {
-                        pointSize: Theme.largeContentFontSize
-                        bold: true
-                    }
+                    font: window.largeContentFont
                     color: Theme.labelColor
                     text: NetworkInformation.localHostName
                 }
@@ -161,10 +155,7 @@ AcrylicWindow {
                 }
 
                 ClickableLabel {
-                    font {
-                        pointSize: Theme.largeContentFontSize
-                        bold: true
-                    }
+                    font: window.largeContentFont
                     color: Theme.labelColor
                     text: NetworkInformation.localDomainName
                 }
@@ -224,10 +215,7 @@ AcrylicWindow {
                                 fill: parent
                                 leftMargin: Theme.contentsMargin
                             }
-                            font {
-                                bold: true
-                                pointSize: Theme.titleFontSize
-                            }
+                            font: window.titleFont
                             color: Qt.color("white")
                             text: delegate.name
                             verticalAlignment: Text.AlignVCenter
@@ -237,10 +225,7 @@ AcrylicWindow {
                     Label {
                         Layout.leftMargin: Theme.contentsMargin
                         color: Theme.labelColor
-                        font {
-                            bold: true
-                            pointSize: Theme.titleFontSize
-                        }
+                        font: window.titleFont
                         text: qsTr("Hardware Address")
                     }
 
@@ -254,10 +239,7 @@ AcrylicWindow {
                     Label {
                         Layout.leftMargin: Theme.contentsMargin
                         color: Theme.labelColor
-                        font {
-                            bold: true
-                            pointSize: Theme.titleFontSize
-                        }
+                        font: window.titleFont
                         text: qsTr("IPv4 Address")
                     }
 
@@ -271,10 +253,7 @@ AcrylicWindow {
                     Label {
                         Layout.leftMargin: Theme.contentsMargin
                         color: Theme.labelColor
-                        font {
-                            bold: true
-                            pointSize: Theme.titleFontSize
-                        }
+                        font: window.titleFont
                         text: qsTr("IPv6 Address")
                     }
 
@@ -288,10 +267,7 @@ AcrylicWindow {
                     Label {
                         Layout.leftMargin: Theme.contentsMargin
                         color: Theme.labelColor
-                        font {
-                            bold: true
-                            pointSize: Theme.titleFontSize
-                        }
+                        font: window.titleFont
                         text: qsTr("Netmask")
                     }
 
@@ -305,10 +281,7 @@ AcrylicWindow {
                     Label {
                         Layout.leftMargin: Theme.contentsMargin
                         color: Theme.labelColor
-                        font {
-                            bold: true
-                            pointSize: Theme.titleFontSize
-                        }
+                        font: window.titleFont
                         text: qsTr("Broadcast Address")
                     }
 
@@ -362,10 +335,7 @@ AcrylicWindow {
                 }
 
                 Label {
-                    font {
-                        pointSize: Theme.largeContentFontSize
-                        bold: true
-                    }
+                    font: window.largeContentFont
                     color: Theme.labelColor
                     text: {
                         switch (NetworkInformation.networkStatus) {
@@ -396,10 +366,7 @@ AcrylicWindow {
                 }
 
                 Label {
-                    font {
-                        pointSize: Theme.largeContentFontSize
-                        bold: true
-                    }
+                    font: window.largeContentFont
                     color: Theme.labelColor
                     text: {
                         switch (NetworkInformation.transportMedium) {
@@ -434,10 +401,7 @@ AcrylicWindow {
                 }
 
                 Label {
-                    font {
-                        pointSize: Theme.largeContentFontSize
-                        bold: true
-                    }
+                    font: window.largeContentFont
                     color: Theme.labelColor
                     text: NetworkInformation.behindCaptivePortal ? qsTr("YES") : qsTr("NO")
                 }
@@ -459,10 +423,7 @@ AcrylicWindow {
                 }
 
                 Label {
-                    font {
-                        pointSize: Theme.largeContentFontSize
-                        bold: true
-                    }
+                    font: window.largeContentFont
                     color: Theme.labelColor
                     text: NetworkInformation.metered ? qsTr("YES") : qsTr("NO")
                 }
