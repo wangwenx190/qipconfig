@@ -27,9 +27,10 @@ cd /d "%~dp0"
 if exist build rd /s /q build
 md build
 cd build
-set _vcpkg_dir=C:\Develop\Sources\build-qt-dev\vcpkg
-set _qt_dir=C:\Develop\Sources\build-qt-dev\build\windows\msvc_x64_static_release
-cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -DCMAKE_TOOLCHAIN_FILE="%_vcpkg_dir%\scripts\buildsystems\vcpkg.cmake" -DCMAKE_PREFIX_PATH="%_qt_dir%" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE=ON -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded -GNinja "%~dp0.."
+set _root_dir=%~dp0..\..
+set _vcpkg_dir=%_root_dir%\build-qt-dev\vcpkg
+set _qt_dir=%_root_dir%\build-qt-dev\build\windows\msvc_x64_static_release
+cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -DCMAKE_TOOLCHAIN_FILE="%_vcpkg_dir%\scripts\buildsystems\vcpkg.cmake" -DCMAKE_PREFIX_PATH="%_qt_dir%" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE=ON -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded -DOFFICIAL_BUILD=ON -GNinja "%~dp0.."
 cmake --build . --target all --config Release --parallel
 endlocal
 cd /d "%~dp0"

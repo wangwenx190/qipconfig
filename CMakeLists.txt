@@ -77,6 +77,16 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(BUILD_SHARED_LIBS OFF)
 
+if(OFFICIAL_BUILD)
+    if(CLANG)
+        # TODO
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        # TODO
+    elseif(MSVC)
+        include(build/toolchains/msvc.cmake)
+    endif()
+endif()
+
 set(PROJECT_VERSION_COMMIT "UNKNOWN")
 find_program(GIT_EXECUTABLE_PATH git)
 if(GIT_EXECUTABLE_PATH AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git")
