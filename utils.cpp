@@ -30,7 +30,7 @@
 #include <QtGui/qguiapplication.h>
 #include <QtGui/qclipboard.h>
 
-static constexpr const QDataStream::Version kFormatVersion = QDataStream::Qt_6_3;
+static constexpr const QDataStream::Version kFormatVersion = QDataStream::Qt_6_4;
 static constexpr const quint32 kMagicNumber = 0xA0B0C0D0;
 
 static const QString kGeometryKey = u"Window/Geometry"_qs;

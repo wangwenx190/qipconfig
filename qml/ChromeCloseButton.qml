@@ -24,7 +24,8 @@
 
 import QtQuick
 
-OptionButtonBase {
-    iconCode: "\ue72c"
-    toolTip: qsTr("Click to re-detect the network configuration.")
+ChromeButtonBase {
+    isClose: true
+    iconCode: "\ue8bb"
+    toolTip: qsTr("Close")
 }

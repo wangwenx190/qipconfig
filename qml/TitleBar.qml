@@ -23,8 +23,34 @@
  */
 
 import QtQuick
+import QtQuick.Controls.Basic
+import QIPConfig
 
-OptionButtonBase {
-    iconCode: "\ue72c"
-    toolTip: qsTr("Click to re-detect the network configuration.")
+Rectangle {
+    property alias minimizeButton: minimizeButton
+    property alias maximizeButton: maximizeButton
+    property alias closeButton: closeButton
+
+    id: titleBar
+    height: Theme.titleBarHeight
+    color: Qt.color("transparent")
+
+    Row {
+        anchors {
+            top: parent.top
+            right: parent.right
+        }
+
+        ChromeMinimizeButton {
+            id: minimizeButton
+        }
+
+        ChromeMaximizeButton {
+            id: maximizeButton
+        }
+
+        ChromeCloseButton {
+            id: closeButton
+        }
+    }
 }

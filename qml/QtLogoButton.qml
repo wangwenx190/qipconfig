@@ -23,22 +23,19 @@
  */
 
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.Basic
 import QIPConfig
 
 Button {
     id: button
     implicitWidth: 100
     implicitHeight: 80
-
-
     contentItem: Image {
         anchors.fill: parent
         mipmap: true
         fillMode: Image.PreserveAspectFit
         source: "qrc:///images/qt_logo_green_rgb.svg"
     }
-
     background: null
 
     ToolTip {

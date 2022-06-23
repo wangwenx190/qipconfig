@@ -24,7 +24,10 @@
 
 import QtQuick
 
-OptionButtonBase {
-    iconCode: "\ue72c"
-    toolTip: qsTr("Click to re-detect the network configuration.")
+ChromeButtonBase {
+    required property bool maximized
+
+    id: button
+    iconCode: button.maximized ? "\ue923" : "\ue922"
+    toolTip: button.maximized ? qsTr("Restore") : qsTr("Maximize")
 }

@@ -53,6 +53,8 @@ class Theme : public QObject
     Q_PROPERTY(QSizeF infoPanelSize READ infoPanelSize CONSTANT FINAL)
     Q_PROPERTY(qreal contentsMargin READ contentsMargin CONSTANT FINAL)
     Q_PROPERTY(QSizeF aboutDialogSize READ aboutDialogSize CONSTANT FINAL)
+    Q_PROPERTY(qreal titleBarHeight READ titleBarHeight CONSTANT FINAL)
+    Q_PROPERTY(QString iconFontName READ iconFontName CONSTANT FINAL)
 
 public:
     enum class ThemeType { Light, Dark, System, Default = Dark };
@@ -79,6 +81,8 @@ public:
     [[nodiscard]] QSizeF infoPanelSize() const;
     [[nodiscard]] qreal contentsMargin() const;
     [[nodiscard]] QSizeF aboutDialogSize() const;
+    [[nodiscard]] qreal titleBarHeight() const;
+    [[nodiscard]] QString iconFontName() const;
 
 public Q_SLOTS:
     void refresh();

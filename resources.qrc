@@ -1,9 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/refresh_dark.svg</file>
-        <file>images/refresh_light.svg</file>
-        <file>images/information_dark.svg</file>
-        <file>images/information_light.svg</file>
+        <file>fonts/Segoe Fluent Icons.ttf</file>
         <file>images/qt_logo_black_rgb.svg</file>
         <file>images/qt_logo_green_rgb.svg</file>
         <file>images/qt_logo_white_rgb.svg</file>

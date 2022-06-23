@@ -30,19 +30,18 @@ static struct {
     QTranslator *translator = nullptr;
     QString fileName = {};
 } g_availableTranslators[] = {
-    { nullptr, u"QIPConfig_en_US"_qs }, // Just a placeholder.
+    { nullptr, u"QIPConfig_en_US"_qs },
     { nullptr, u"QIPConfig_zh_Hans"_qs }
 };
 
 static constexpr const auto g_translatorCount = int(std::size(g_availableTranslators));
-static constexpr const int g_translatorOffset = (static_cast<int>(TranslationManager::Language::en_US) + 1);
 
 Q_GLOBAL_STATIC(TranslationManager, translationManager)
 
 TranslationManager::TranslationManager(QObject *parent) : QObject(parent)
 {
     qRegisterMetaType<Language>();
-    for (int i = g_translatorOffset; i != g_translatorCount; ++i) {
+    for (int i = 0; i != g_translatorCount; ++i) {
         auto translator = new QTranslator;
         if (translator->load(g_availableTranslators[i].fileName, u":/i18n"_qs)) {
             g_availableTranslators[i].translator = translator;
@@ -56,7 +55,7 @@ TranslationManager::TranslationManager(QObject *parent) : QObject(parent)
 
 TranslationManager::~TranslationManager()
 {
-    for (int i = g_translatorOffset; i != g_translatorCount; ++i) {
+    for (int i = 0; i != g_translatorCount; ++i) {
         if (g_availableTranslators[i].translator) {
             delete g_availableTranslators[i].translator;
             g_availableTranslators[i].translator = nullptr;
@@ -104,7 +103,7 @@ void TranslationManager::setLanguage(const Language lang)
 
 void TranslationManager::uninstallAllTranslators()
 {
-    for (int i = g_translatorOffset; i != g_translatorCount; ++i) {
+    for (int i = 0; i != g_translatorCount; ++i) {
         if (g_availableTranslators[i].translator) {
             qApp->removeTranslator(g_availableTranslators[i].translator);
         }

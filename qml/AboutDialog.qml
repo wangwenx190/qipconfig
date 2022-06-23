@@ -23,23 +23,23 @@
  */
 
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.Basic
 import QtQuick.Layouts
 import org.wangwenx190.FramelessHelper
 import QIPConfig
 
 AcrylicWindow {
-    id: window
-    width: Theme.aboutDialogSize.width
-    height: Theme.aboutDialogSize.height
-    visible: false
-    title: qsTr("About")
-
     property font labelFont: Qt.font({ bold:true, pointSize:Theme.contentFontSize })
 
     function bringWindowToFront() {
         FramelessHelper.bringWindowToFront();
     }
+
+    id: window
+    width: Theme.aboutDialogSize.width
+    height: Theme.aboutDialogSize.height
+    visible: false
+    title: qsTr("About")
 
     FramelessHelper.onReady: {
         FramelessHelper.windowFixedSize = true;
@@ -122,15 +122,21 @@ AcrylicWindow {
         }
     }
 
-    StandardTitleBar {
+    TitleBar {
         id: titleBar
         anchors {
             top: window.topBorderBottom
             left: parent.left
             right: parent.right
         }
-        hideWhenClose: true
+        color: window.color
         minimizeButton.visible: false
-        maximizeButton.visible: false
+        maximizeButton {
+            maximized: false
+            visible: false
+        }
+        closeButton {
+            onClicked: window.hide()
+        }
     }
 }

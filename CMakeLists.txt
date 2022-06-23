@@ -22,7 +22,7 @@
   SOFTWARE.
 ]]
 
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.24)
 
 project(QIPConfig
     VERSION 1.0.0.0
@@ -65,7 +65,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -101,7 +101,7 @@ set(QAPPLICATION_CLASS QGuiApplication)
 
 set(translations_dir ${CMAKE_CURRENT_SOURCE_DIR}/translations)
 
-find_package(Qt6 REQUIRED COMPONENTS
+find_package(Qt6 6.4 REQUIRED COMPONENTS
     Core Network Gui ShaderTools Quick
     QuickControls2 LinguistTools
 )
@@ -141,12 +141,21 @@ set(QML_SOURCES
     qml/main.qml
     qml/QtLogoButton.qml
     qml/ClickableAppTitle.qml
+    qml/ChromeButtonBase.qml
+    qml/ChromeMinimizeButton.qml
+    qml/ChromeMaximizeButton.qml
+    qml/ChromeCloseButton.qml
+    qml/TitleBar.qml
+    qml/OptionButtonBase.qml
 )
 
 qt_add_qml_module(${PROJECT_NAME}
     URI ${PROJECT_NAME}
     VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    IMPORTS QtQuick
+    IMPORTS
+        QtQml
+        QtQuick
+        QtQuick.Controls.Basic
     DEPENDENCIES
         org.wangwenx190.FramelessHelper
         org.wangwenx190.QtAcrylicMaterial
@@ -155,6 +164,7 @@ qt_add_qml_module(${PROJECT_NAME}
 
 qt_add_translations(${PROJECT_NAME}
     TS_FILES
+        ${translations_dir}/${PROJECT_NAME}_en_US.ts
         ${translations_dir}/${PROJECT_NAME}_zh_Hans.ts
     LUPDATE_OPTIONS
         -no-obsolete -no-recursive
@@ -195,17 +205,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 if(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE
-        /utf-8 /W3 /WX
+        /W4 # /WX
     )
-    target_link_options(${PROJECT_NAME} PRIVATE /WX)
-    if(NOT (CMAKE_BUILD_TYPE STREQUAL "Debug"))
-        target_compile_options(${PROJECT_NAME} PRIVATE
-            /Zc:inline /Gy /Gw
-        )
-        target_link_options(${PROJECT_NAME} PRIVATE
-            /OPT:REF /OPT:ICF
-        )
-    endif()
 else()
     target_compile_options(${PROJECT_NAME} PRIVATE
         -Wall -Wextra -Werror

@@ -95,7 +95,7 @@ QColor Theme::windowColor() const
 QColor Theme::infoPanelColor() const
 {
     QColor color = (m_dark ? QColorConstants::Black : QColorConstants::White);
-    static constexpr const auto alpha = int(qRound(0.2 * 255.0));
+    static constexpr const int alpha = qRound(0.2 * 255.0);
     color.setAlpha(alpha);
     return color;
 }
@@ -118,6 +118,17 @@ qreal Theme::contentsMargin() const
 QSizeF Theme::aboutDialogSize() const
 {
     return {610, 450};
+}
+
+qreal Theme::titleBarHeight() const
+{
+    return 32;
+}
+
+QString Theme::iconFontName() const
+{
+    static const QString result = u"Segoe Fluent Icons"_qs;
+    return result;
 }
 
 bool Theme::eventFilter(QObject *object, QEvent *event)

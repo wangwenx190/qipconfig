@@ -25,6 +25,7 @@
 #include <QtCore/qlocale.h>
 #include <QtCore/qloggingcategory.h>
 #include <QtCore/qcommandlineparser.h>
+#include <QtGui/qfontdatabase.h>
 #include <QtNetwork/qnetworkproxy.h>
 #include <QtQml/qqmlapplicationengine.h>
 #include <QtQml/qqmlcontext.h>
@@ -32,6 +33,7 @@
 #include <QtQuick/qquickwindow.h>
 #include <QtQuickControls2/qquickstyle.h>
 #include <framelessquickmodule.h>
+#include <private/framelessconfig_p.h>
 #include <qtacrylicmaterialplugin.h>
 #include <singleapplication.h>
 #include "theme.h"
@@ -39,6 +41,10 @@
 #include "networkadaptermodel.h"
 #ifdef Q_OS_WINDOWS
 #  include <QtCore/qt_windows.h>
+#endif
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 4, 0))
+#  error Please upgrade your Qt SDK to the latest version!
 #endif
 
 FRAMELESSHELPER_USE_NAMESPACE
@@ -189,7 +195,15 @@ int main(int argc, char *argv[])
 
     commandLine.process(application);
 
+    QLoggingCategory::setFilterRules(u"qt.scenegraph.general=true\nqt.rhi.*=true"_qs);
+
+    QNetworkProxyFactory::setUseSystemConfiguration(commandLine.isSet(useSystemProxyOption));
+
+    FramelessConfig::instance()->set(Global::Option::WindowUseRoundCorners);
+
     Theme::setPreferredTheme(getPreferredTheme(commandLine.value(themeOption)));
+
+    QFontDatabase::addApplicationFont(u":/fonts/Segoe Fluent Icons.ttf"_qs);
 
     const std::optional<QSGRendererInterface::GraphicsApi> preferredGraphicsApi = getPreferredGraphicsApi(commandLine.value(graphicsApiOption));
     if (preferredGraphicsApi.has_value()) {
@@ -197,10 +211,6 @@ int main(int argc, char *argv[])
     }
 
     QQuickStyle::setStyle(u"Basic"_qs);
-
-    QNetworkProxyFactory::setUseSystemConfiguration(commandLine.isSet(useSystemProxyOption));
-
-    QLoggingCategory::setFilterRules(u"qt.scenegraph.general=true\nqt.rhi.*=true"_qs);
 
     NetworkAdapterModel model;
 
@@ -213,24 +223,13 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty(u"networkAdapterModel"_qs, &model);
 
-    const QUrl mainUrl(u"qrc:///QIPConfig/qml/main.qml"_qs);
-
-    const QMetaObject::Connection connection = QObject::connect(
-        &engine,
-        &QQmlApplicationEngine::objectCreated,
-        &application,
-        [&mainUrl, &connection](QObject *object, const QUrl &objectUrl) {
-            if (objectUrl != mainUrl) {
-                return;
-            }
-            if (object) {
-                QObject::disconnect(connection);
-            } else {
-                QCoreApplication::exit(-1);
-            }
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, QCoreApplication::instance(),
+        [](const QUrl &url){
+            qCritical() << "Failed to create object" << url;
+            QCoreApplication::exit(-1);
         }, Qt::QueuedConnection);
 
-    engine.load(mainUrl);
+    engine.load(QUrl(u"qrc:///QIPConfig/qml/main.qml"_qs));
 
     const QObjectList rootObjects = engine.rootObjects();
     Q_ASSERT(!rootObjects.isEmpty());

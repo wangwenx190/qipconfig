@@ -23,8 +23,34 @@
  */
 
 import QtQuick
+import QtQuick.Controls.Basic
+import QIPConfig
 
-OptionButtonBase {
-    iconCode: "\ue72c"
-    toolTip: qsTr("Click to re-detect the network configuration.")
+Button {
+    required property string iconCode
+    required property string toolTip
+
+    id: button
+    implicitHeight: 50
+    implicitWidth: implicitHeight
+    contentItem: Label {
+        anchors.fill: parent
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        font {
+            family: Theme.iconFontName
+            pointSize: 20
+        }
+        text: button.iconCode
+    }
+    background: Rectangle {
+        visible: button.hovered || button.down
+        color: Theme.infoPanelColor
+    }
+
+    ToolTip {
+        delay: 0
+        text: button.toolTip
+        visible: button.hovered
+    }
 }

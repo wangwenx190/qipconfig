@@ -23,20 +23,12 @@
  */
 
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.Basic
 import QtQuick.Layouts
 import org.wangwenx190.FramelessHelper
 import QIPConfig
 
 AcrylicWindow {
-    id: window
-    width: Theme.windowSize.width
-    height: Theme.windowSize.height
-    visible: false
-    title: Application.displayName
-    onClosing: Utils.saveGeometry(window)
-    Component.onCompleted: Theme.setup(window)
-
     property font titleFont: Qt.font({ bold:true,pointSize:Theme.titleFontSize })
     property font largeContentFont: Qt.font({ bold:true,pointSize:Theme.largeContentFontSize })
 
@@ -45,6 +37,22 @@ AcrylicWindow {
     function bringWindowToFront() {
         FramelessHelper.bringWindowToFront();
     }
+
+    function toggleMaximized() {
+        if (window.visibility === Window.Maximized) {
+            window.showNormal();
+        } else {
+            window.showMaximized();
+        }
+    }
+
+    id: window
+    width: Theme.windowSize.width
+    height: Theme.windowSize.height
+    visible: false
+    title: Application.displayName
+    onClosing: Utils.saveGeometry(window)
+    Component.onCompleted: Theme.setup(window)
 
     FramelessHelper.onReady: {
         FramelessHelper.titleBarItem = titleBar;
@@ -444,15 +452,23 @@ AcrylicWindow {
         }
     }
 
-    StandardTitleBar {
+    TitleBar {
         id: titleBar
         anchors {
             top: window.topBorderBottom
             left: parent.left
             right: parent.right
         }
-        titleLabel.visible: false
-        useAlternativeBackground: true
         color: window.color
+        minimizeButton {
+            onClicked: window.showMinimized()
+        }
+        maximizeButton {
+            maximized: window.visibility === Window.Maximized
+            onClicked: window.toggleMaximized()
+        }
+        closeButton {
+            onClicked: window.close()
+        }
     }
 }
