@@ -48,7 +48,7 @@ Button {
             family: Theme.iconFontName
             pointSize: 7
         }
-        color: button.hovered ? Qt.color("white") : Qt.color("black")
+        color: button.hovered || (Theme.theme === Theme.Dark) ? Qt.color("white") : Qt.color("black")
         text: button.iconCode
     }
     background: Rectangle {
