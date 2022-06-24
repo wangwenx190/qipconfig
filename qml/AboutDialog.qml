@@ -122,21 +122,18 @@ AcrylicWindow {
         }
     }
 
-    TitleBar {
+    StandardTitleBar {
         id: titleBar
         anchors {
             top: window.topBorderBottom
             left: parent.left
             right: parent.right
         }
+        useAlternativeBackground: true
+        hideWhenClose: true
         color: window.color
+        titleLabel.visible: false
         minimizeButton.visible: false
-        maximizeButton {
-            maximized: false
-            visible: false
-        }
-        closeButton {
-            onClicked: window.hide()
-        }
+        maximizeButton.visible: false
     }
 }

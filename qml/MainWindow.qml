@@ -38,14 +38,6 @@ AcrylicWindow {
         FramelessHelper.bringWindowToFront();
     }
 
-    function toggleMaximized() {
-        if (window.visibility === Window.Maximized) {
-            window.showNormal();
-        } else {
-            window.showMaximized();
-        }
-    }
-
     id: window
     width: Theme.windowSize.width
     height: Theme.windowSize.height
@@ -452,23 +444,15 @@ AcrylicWindow {
         }
     }
 
-    TitleBar {
+    StandardTitleBar {
         id: titleBar
         anchors {
             top: window.topBorderBottom
             left: parent.left
             right: parent.right
         }
+        useAlternativeBackground: true
+        titleLabel.visible: false
         color: window.color
-        minimizeButton {
-            onClicked: window.showMinimized()
-        }
-        maximizeButton {
-            maximized: window.visibility === Window.Maximized
-            onClicked: window.toggleMaximized()
-        }
-        closeButton {
-            onClicked: window.close()
-        }
     }
 }

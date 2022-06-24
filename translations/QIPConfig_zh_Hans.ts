@@ -50,35 +50,6 @@
     </message>
 </context>
 <context>
-    <name>ChromeCloseButton</name>
-    <message>
-        <location filename="../qml/ChromeCloseButton.qml" line="30"/>
-        <source>Close</source>
-        <translation>关闭</translation>
-    </message>
-</context>
-<context>
-    <name>ChromeMaximizeButton</name>
-    <message>
-        <location filename="../qml/ChromeMaximizeButton.qml" line="32"/>
-        <source>Restore</source>
-        <translation>向下还原</translation>
-    </message>
-    <message>
-        <location filename="../qml/ChromeMaximizeButton.qml" line="32"/>
-        <source>Maximize</source>
-        <translation>最大化</translation>
-    </message>
-</context>
-<context>
-    <name>ChromeMinimizeButton</name>
-    <message>
-        <location filename="../qml/ChromeMinimizeButton.qml" line="29"/>
-        <source>Minimize</source>
-        <translation>最小化</translation>
-    </message>
-</context>
-<context>
     <name>ClickableAppTitle</name>
     <message>
         <location filename="../qml/ClickableAppTitle.qml" line="39"/>
@@ -123,115 +94,115 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../qml/MainWindow.qml" line="96"/>
+        <location filename="../qml/MainWindow.qml" line="88"/>
         <source>Internet Address</source>
         <translation>网络地址</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="118"/>
+        <location filename="../qml/MainWindow.qml" line="110"/>
         <source>Local Address</source>
         <translation>本地地址</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="140"/>
+        <location filename="../qml/MainWindow.qml" line="132"/>
         <source>Local Host</source>
         <translation>本地主机</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="162"/>
+        <location filename="../qml/MainWindow.qml" line="154"/>
         <source>Local Domain</source>
         <translation>本地域</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="237"/>
+        <location filename="../qml/MainWindow.qml" line="229"/>
         <source>Hardware Address</source>
         <translation>硬件地址</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="251"/>
+        <location filename="../qml/MainWindow.qml" line="243"/>
         <source>IPv4 Address</source>
         <translation>IPv4地址</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="265"/>
+        <location filename="../qml/MainWindow.qml" line="257"/>
         <source>IPv6 Address</source>
         <translation>IPv6地址</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="279"/>
+        <location filename="../qml/MainWindow.qml" line="271"/>
         <source>Netmask</source>
         <translation>子网掩码</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="293"/>
+        <location filename="../qml/MainWindow.qml" line="285"/>
         <source>Broadcast Address</source>
         <translation>广播地址</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="342"/>
+        <location filename="../qml/MainWindow.qml" line="334"/>
         <source>Network Status</source>
         <translation>网络状态</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="351"/>
-        <location filename="../qml/MainWindow.qml" line="382"/>
+        <location filename="../qml/MainWindow.qml" line="343"/>
+        <location filename="../qml/MainWindow.qml" line="374"/>
         <source>UNKNOWN</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="353"/>
+        <location filename="../qml/MainWindow.qml" line="345"/>
         <source>ONLINE</source>
         <translation>在线</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="355"/>
+        <location filename="../qml/MainWindow.qml" line="347"/>
         <source>OFFLINE</source>
         <translation>离线</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="373"/>
+        <location filename="../qml/MainWindow.qml" line="365"/>
         <source>Transport Medium</source>
         <translation>传输介质</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="384"/>
+        <location filename="../qml/MainWindow.qml" line="376"/>
         <source>ETHERNET</source>
         <translation>以太网</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="386"/>
+        <location filename="../qml/MainWindow.qml" line="378"/>
         <source>CELLULAR</source>
         <translation>蜂窝网络</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="388"/>
+        <location filename="../qml/MainWindow.qml" line="380"/>
         <source>WIFI</source>
         <translation>无线局域网</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="390"/>
+        <location filename="../qml/MainWindow.qml" line="382"/>
         <source>BLUETOOTH</source>
         <translation>蓝牙</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="408"/>
+        <location filename="../qml/MainWindow.qml" line="400"/>
         <source>Behind Captive Portal</source>
         <translation>强制网络门户</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="414"/>
-        <location filename="../qml/MainWindow.qml" line="436"/>
+        <location filename="../qml/MainWindow.qml" line="406"/>
+        <location filename="../qml/MainWindow.qml" line="428"/>
         <source>YES</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="414"/>
-        <location filename="../qml/MainWindow.qml" line="436"/>
+        <location filename="../qml/MainWindow.qml" line="406"/>
+        <location filename="../qml/MainWindow.qml" line="428"/>
         <source>NO</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="430"/>
+        <location filename="../qml/MainWindow.qml" line="422"/>
         <source>Metered</source>
         <translation>按流量计费</translation>
     </message>

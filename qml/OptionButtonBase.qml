@@ -45,7 +45,7 @@ Button {
         color: Theme.theme === Theme.Dark ? Qt.color("white") : Qt.color("black")
     }
     background: Rectangle {
-        visible: button.hovered || button.down
+        visible: button.hovered || button.pressed
         color: Theme.infoPanelColor
     }
 

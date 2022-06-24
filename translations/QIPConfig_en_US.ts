@@ -50,35 +50,6 @@
     </message>
 </context>
 <context>
-    <name>ChromeCloseButton</name>
-    <message>
-        <location filename="../qml/ChromeCloseButton.qml" line="30"/>
-        <source>Close</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ChromeMaximizeButton</name>
-    <message>
-        <location filename="../qml/ChromeMaximizeButton.qml" line="32"/>
-        <source>Restore</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/ChromeMaximizeButton.qml" line="32"/>
-        <source>Maximize</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ChromeMinimizeButton</name>
-    <message>
-        <location filename="../qml/ChromeMinimizeButton.qml" line="29"/>
-        <source>Minimize</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ClickableAppTitle</name>
     <message>
         <location filename="../qml/ClickableAppTitle.qml" line="39"/>
@@ -123,115 +94,115 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../qml/MainWindow.qml" line="96"/>
+        <location filename="../qml/MainWindow.qml" line="88"/>
         <source>Internet Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="118"/>
+        <location filename="../qml/MainWindow.qml" line="110"/>
         <source>Local Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="140"/>
+        <location filename="../qml/MainWindow.qml" line="132"/>
         <source>Local Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="162"/>
+        <location filename="../qml/MainWindow.qml" line="154"/>
         <source>Local Domain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="237"/>
+        <location filename="../qml/MainWindow.qml" line="229"/>
         <source>Hardware Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="251"/>
+        <location filename="../qml/MainWindow.qml" line="243"/>
         <source>IPv4 Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="265"/>
+        <location filename="../qml/MainWindow.qml" line="257"/>
         <source>IPv6 Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="279"/>
+        <location filename="../qml/MainWindow.qml" line="271"/>
         <source>Netmask</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="293"/>
+        <location filename="../qml/MainWindow.qml" line="285"/>
         <source>Broadcast Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="342"/>
+        <location filename="../qml/MainWindow.qml" line="334"/>
         <source>Network Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="351"/>
-        <location filename="../qml/MainWindow.qml" line="382"/>
+        <location filename="../qml/MainWindow.qml" line="343"/>
+        <location filename="../qml/MainWindow.qml" line="374"/>
         <source>UNKNOWN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="353"/>
+        <location filename="../qml/MainWindow.qml" line="345"/>
         <source>ONLINE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="355"/>
+        <location filename="../qml/MainWindow.qml" line="347"/>
         <source>OFFLINE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="373"/>
+        <location filename="../qml/MainWindow.qml" line="365"/>
         <source>Transport Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="384"/>
+        <location filename="../qml/MainWindow.qml" line="376"/>
         <source>ETHERNET</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="386"/>
+        <location filename="../qml/MainWindow.qml" line="378"/>
         <source>CELLULAR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="388"/>
+        <location filename="../qml/MainWindow.qml" line="380"/>
         <source>WIFI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="390"/>
+        <location filename="../qml/MainWindow.qml" line="382"/>
         <source>BLUETOOTH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="408"/>
+        <location filename="../qml/MainWindow.qml" line="400"/>
         <source>Behind Captive Portal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="414"/>
-        <location filename="../qml/MainWindow.qml" line="436"/>
+        <location filename="../qml/MainWindow.qml" line="406"/>
+        <location filename="../qml/MainWindow.qml" line="428"/>
         <source>YES</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="414"/>
-        <location filename="../qml/MainWindow.qml" line="436"/>
+        <location filename="../qml/MainWindow.qml" line="406"/>
+        <location filename="../qml/MainWindow.qml" line="428"/>
         <source>NO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainWindow.qml" line="430"/>
+        <location filename="../qml/MainWindow.qml" line="422"/>
         <source>Metered</source>
         <translation type="unfinished"></translation>
     </message>

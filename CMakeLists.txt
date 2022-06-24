@@ -151,11 +151,6 @@ set(QML_SOURCES
     qml/main.qml
     qml/QtLogoButton.qml
     qml/ClickableAppTitle.qml
-    qml/ChromeButtonBase.qml
-    qml/ChromeMinimizeButton.qml
-    qml/ChromeMaximizeButton.qml
-    qml/ChromeCloseButton.qml
-    qml/TitleBar.qml
     qml/OptionButtonBase.qml
 )
 
