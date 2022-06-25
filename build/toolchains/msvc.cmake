@@ -125,7 +125,7 @@ foreach(_lang ${_langs})
     # Don't optimize too aggressively if we want to debug the code.
     string(REGEX REPLACE "${_old_flag_regex}" "${_o2_flag}" CMAKE_${_lang}_FLAGS_RELWITHDEBINFO ${CMAKE_${_lang}_FLAGS_RELWITHDEBINFO})
 endforeach()
-set(_linker_flags "/CETCOMPAT /DYNAMICBASE /force:guardehcont /GUARD:CF /GUARD:EHCONT /LARGEADDRESSAWARE ${_ltcg_link_flag} /NXCOMPAT /OPT:REF /OPT:ICF /WX")
+set(_linker_flags "/CETCOMPAT /DYNAMICBASE /GUARD:CF /GUARD:EHCONT /LARGEADDRESSAWARE ${_ltcg_link_flag} /NXCOMPAT /OPT:REF /OPT:ICF /WX")
 if(_arch STREQUAL "x64")
     # "/HIGHENTROPYVA" is only suitable for 64-bit architecture.
     string(APPEND _linker_flags " /HIGHENTROPYVA ")
