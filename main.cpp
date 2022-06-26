@@ -199,6 +199,8 @@ int main(int argc, char *argv[])
 
     QNetworkProxyFactory::setUseSystemConfiguration(commandLine.isSet(useSystemProxyOption));
 
+    FramelessConfig::setLoadFromEnvironmentVariablesDisabled();
+    FramelessConfig::setLoadFromConfigurationFileDisabled();
     FramelessConfig::instance()->set(Global::Option::WindowUseRoundCorners);
 
     Theme::setPreferredTheme(getPreferredTheme(commandLine.value(themeOption)));
