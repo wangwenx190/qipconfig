@@ -51,7 +51,7 @@ endif()
 string(REGEX REPLACE "[-|/]std:c[90|99|11|17|23]" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
 string(APPEND CMAKE_C_FLAGS " ${_c17_flag} ")
 # Enable C++20 standard.
-string(REGEX REPLACE "[-|/]std:c++[98|11|14|17|20|23]" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+string(REGEX REPLACE "[-|/]std:c\\+\\+[98|11|14|17|20|23]" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 string(APPEND CMAKE_CXX_FLAGS " ${_cxx20_flag} ")
 # Enable exception handling for C++. Some of our dependencies need it.
 string(REGEX REPLACE "[-|/]EHs-c-" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
